@@ -1,0 +1,3 @@
+const XSPEED = 160;
+const YSPEED = 170;
+const ACCELERATION = 1200;
