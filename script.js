@@ -1,3 +1,7 @@
+// import { Menu as Menu } from "./assets/scripts/scenes/Menu.js";
+import { Preload as Preload } from "./assets/scripts/scenes/Preload.js";
+import { Test as Test } from "./assets/scripts/scenes/Test.js";
+
 var config =
 {
     type: Phaser.AUTO,
@@ -11,11 +15,11 @@ var config =
         default: 'arcade',
         arcade:
         {
-            gravity: { y: 0 },
-            debug: false
+            gravity: { y: 1000 },
+            debug: true
         }
     },
-    scene: [  ],
+    scene: [ Preload, Test ],
     pixelArt: true,
     input:
     {
