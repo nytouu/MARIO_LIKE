@@ -22,7 +22,7 @@ export class Test extends Phaser.Scene {
 		this.physics.add.collider(this.player, layer);
 
 		this.cameras.main.startFollow(this.player).setLerp(0.10);
-		this.cameras.main.setZoom(2);
+		this.cameras.main.setZoom(5);
 	}
 
     update(){
