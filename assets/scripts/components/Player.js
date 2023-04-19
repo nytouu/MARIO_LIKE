@@ -43,7 +43,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.drawDashTrail() 
 		}
 		this.removeTrail();
-		
 	}
 
 	handleInput(){
@@ -52,25 +51,27 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			right: keyRight,
 			up: keyUp,
 			down: keyDown,
-			space: keySpace
 		} = this.cursors;
 		const upOnce = Phaser.Input.Keyboard.JustDown(keyUp);
-		const spaceOnce = Phaser.Input.Keyboard.JustDown(keySpace);
+        const keyX = Phaser.Input.Keyboard.JustDown(
+			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+		);
 
 		this.onGround = this.body.blocked.down;
 
-		if (spaceOnce && this.canDash){
+		if (keyX && this.canDash && 
+			(keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown)){
 			this.isDashing = true;
 
 			var dx = 0, dy = 0;
 
-			if (keyRight.isDown) 	dx = 1; 
-			if (keyLeft.isDown) 	dx = -1; 
-			if (keyUp.isDown)		dy = -1
-			if (keyDown.isDown)		dy = 1;
-			
+			if (keyRight.isDown) dx = 1; 
+			if (keyLeft.isDown) dx = -1; 
+			if (keyUp.isDown) dy = -1
+			if (keyDown.isDown) dy = 1;
+
 			this.dash(dx, dy);
-		}	
+		}
 
 		if (this.canMove){
 			this.basicMovement(keyLeft, keyRight, keyUp, upOnce);
@@ -120,9 +121,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	dash(dx, dy){
 		if (dx == 0 && dy == 0)
 			return
-		else
-		{
+		else {
 			this.setGravity(0,0);
+			this.setAcceleration(0,0);
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
 
 			this.isDashing = true;
