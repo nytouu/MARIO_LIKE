@@ -19,6 +19,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setMaxVelocity(XSPEED, YSPEED);
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
+
 		this.canMove = true;
 		this.canJump = true;
 		this.canDash = true;
@@ -43,6 +44,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.isDashing){
 			this.drawDashTrail() 
 		} else if (this.onGround){
+            // FIXME don't do this every frame
 			this.setMaxVelocity(XSPEED, YSPEED);
             this.isJumping = false;
             this.canDash = true;
@@ -148,6 +150,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.body.velocity.normalize().scale(DASH_SPEED);
 
 			this.scene.cameras.main.shake(200, 0.0002);
+
+			setTimeout(() => {
+				if (this.onGround){ 
+					this.canDash = true;
+					this.setTint(0xffffff);
+				}
+			}, DASH_TIME - 30),
 
 			setTimeout(() => {
 				this.interruptDash();
