@@ -63,9 +63,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.onGround = this.body.blocked.down;
 		this.onGround && (this.isJumping = false);
 
-		if (this.isDashing && this.isJumping){
+		if (this.isDashing && this.isJumping && this.onGround){
 			this.interruptDash();
-			// this.isJumping = false;
 		}
 
 		if (keyX && this.canDash && 
@@ -116,9 +115,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			setTimeout(() => {
 				this.canJump = true;
 			}, 100);
-			setTimeout(() => {
-				this.isJumping = false;
-			}, DASH_TIME);
 		} else if (keyUp.isDown && this.jumpTimer != 0){
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
@@ -140,6 +136,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
 
 			this.isDashing = true;
+			this.isJumping = false;
 			this.canDash = false;
 			this.canMove = false;
 
@@ -152,7 +149,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			setTimeout(() => {
 				this.interruptDash();
-				console.log(this.isJumping);
 				!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 			}, DASH_TIME);
 
