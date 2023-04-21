@@ -44,6 +44,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.drawDashTrail() 
 		} else if (this.onGround){
 			this.setMaxVelocity(XSPEED, YSPEED);
+            this.isJumping = false;
+            this.canDash = true;
+            this.setTint(0xffffff);
+		}
+
+		if (this.isDashing && this.isJumping && this.onGround){
+			this.interruptDash();
 		}
 		this.removeTrail();
 	}
@@ -61,11 +68,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		);
 
 		this.onGround = this.body.blocked.down;
-		this.onGround && (this.isJumping = false);
-
-		if (this.isDashing && this.isJumping && this.onGround){
-			this.interruptDash();
-		}
 
 		if (keyX && this.canDash && 
 			(keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown)){
@@ -152,10 +154,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 			}, DASH_TIME);
 
-			setTimeout(() => {
-				this.canDash = true;
-			}, DASH_TIME + 1000);
-
 			this.setTint(0x00ffff);
 		}
 	}
@@ -189,7 +187,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isDashing = false;
 		this.canMove = true;
 
-		this.setTint(0xffffff);
+		// this.setTint(0xffffff);
 		this.setGravity(0, GRAVITY);
 	}
 }
