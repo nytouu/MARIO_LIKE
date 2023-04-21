@@ -23,6 +23,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canJump = true;
 		this.canDash = true;
 		this.isDashing = false;
+		this.isJumping = false;
 		this.jumpTimer = 0;
 
 		this.onGround = this.body.blocked.down;
@@ -41,6 +42,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		if (this.isDashing){
 			this.drawDashTrail() 
+		} else if (this.onGround){
+			this.setMaxVelocity(XSPEED, YSPEED);
 		}
 		this.removeTrail();
 	}
@@ -58,6 +61,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		);
 
 		this.onGround = this.body.blocked.down;
+		this.onGround && (this.isJumping = false);
+
+		if (this.isDashing && this.isJumping){
+			this.interruptDash();
+			// this.isJumping = false;
+		}
 
 		if (keyX && this.canDash && 
 			(keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown)){
@@ -73,27 +82,27 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.dash(dx, dy);
 		}
 
-		if (this.canMove){
-			this.basicMovement(keyLeft, keyRight, keyUp, upOnce);
-		}
+		this.basicMovement(keyLeft, keyRight, keyUp, upOnce);
 	}
 
 	basicMovement(keyLeft, keyRight, keyUp, upOnce){
-		if (keyLeft.isDown){
-			this.setAccelerationX(-ACCELERATION);
-		} else if (keyRight.isDown){
-			this.setAccelerationX(ACCELERATION);
-		} else {
-			if (this.onGround){
-				this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
+		if (this.canMove){
+			if (keyLeft.isDown){
+				this.setAccelerationX(-ACCELERATION);
+			} else if (keyRight.isDown){
+				this.setAccelerationX(ACCELERATION);
 			} else {
-				this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
-			}
+				if (this.onGround){
+					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
+				} else {
+					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
+				}
 
-			// reset velocity and acceleration when slow enough
-			if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
-				this.setVelocityX(0);
-				this.setAccelerationX(0);
+				// reset velocity and acceleration when slow enough
+				if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
+					this.setVelocityX(0);
+					this.setAccelerationX(0);
+				}
 			}
 		}
 
@@ -101,11 +110,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (upOnce && this.canJump && this.onGround){
 			this.jumpTimer = 1;
 			this.canJump = false;
+			this.isJumping = true;
 			this.setVelocityY(-YSPEED);
 
 			setTimeout(() => {
 				this.canJump = true;
 			}, 100);
+			setTimeout(() => {
+				this.isJumping = false;
+			}, DASH_TIME);
 		} else if (keyUp.isDown && this.jumpTimer != 0){
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
@@ -122,7 +135,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (dx == 0 && dy == 0)
 			return
 		else {
-			this.setGravity(0,0);
+			this.setGravity(0,1); // y gravity to keep this.onGround true when needed
 			this.setAcceleration(0,0);
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
 
@@ -135,13 +148,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			this.body.velocity.normalize().scale(DASH_SPEED);
 
-			setTimeout(() => {
-				this.isDashing = false;
-				this.canMove = true;
+			this.scene.cameras.main.shake(200, 0.0002);
 
-				this.setTint(0xffffff);
-				this.setMaxVelocity(XSPEED, YSPEED);
-				this.setGravity(0, GRAVITY);
+			setTimeout(() => {
+				this.interruptDash();
+				console.log(this.isJumping);
+				!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 			}, DASH_TIME);
 
 			setTimeout(() => {
@@ -175,5 +187,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			silhouette.alpha -= 0.05;
 			silhouette.alpha <= 0 && silhouette.destroy();
 		})
+	}
+
+	interruptDash(){
+		this.isDashing = false;
+		this.canMove = true;
+
+		this.setTint(0xffffff);
+		this.setGravity(0, GRAVITY);
 	}
 }
