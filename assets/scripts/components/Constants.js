@@ -5,3 +5,6 @@ const ACCELERATION = 1200;
 const DASH_SPEED = 240;
 const DASH_TIME = 300;
 const DASH_RESET_TIME = 20;
+const BUTTON_A = 0;
+const BUTTON_X = 2;
+const AXIS_THRESHOLD = 0.5;

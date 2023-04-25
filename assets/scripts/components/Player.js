@@ -30,7 +30,90 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.onGround = this.body.blocked.down;
 
 		this.dashTrail = this.scene.add.group();
+
+		this.inputPad = {
+			up: false,
+			down: false,
+			left: false,
+			right: false,
+			a: false,
+			aOnce: false,
+			x: false,
+		};
+
+		this.scene.input.gamepad.on('connected', () => {
+            this.gamepad = this.scene.input.gamepad.pad1;
+            this.gamepadEventConnect(this);
+        });
+        this.scene.input.gamepad.on('disconnected', this.gamepadEventDisconnect, this);
 	}
+
+	gamepadEventConnect(){
+        console.log("Controller connected!");
+
+        this.gamepad.on('down', () => {
+            this.handleGamepadButtons();
+        });
+        this.gamepad.on('up', () => {
+            this.handleGamepadButtons();
+        });
+	}
+
+	handleGamepadButtons(){
+		const buttonA = this.gamepad.buttons[BUTTON_A];
+		const buttonX = this.gamepad.buttons[BUTTON_X];
+
+		this.inputPad.x = buttonX.value;
+
+		this.inputPad.a = buttonA.value;
+		this.inputPad.aOnce = buttonA.value;
+	}
+
+	handleGamepadAxis(){
+		if (this.gamepad){
+
+			const horizAxis = this.gamepad.axes[0].value;
+			const vertAxis = this.gamepad.axes[1].value;
+
+			const dpadHorizAxis = this.gamepad.axes[6].value;
+			const dpadVertAxis = this.gamepad.axes[7].value;
+
+			if (horizAxis < AXIS_THRESHOLD && horizAxis > -AXIS_THRESHOLD && 
+				vertAxis < AXIS_THRESHOLD && vertAxis > -AXIS_THRESHOLD){
+				dpadVertAxis > AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
+				dpadVertAxis < -AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
+				dpadHorizAxis > AXIS_THRESHOLD ? this.inputPad.right = true : this.inputPad.right = false;
+				dpadHorizAxis < -AXIS_THRESHOLD ? this.inputPad.left = true : this.inputPad.left = false;
+			} else {
+				vertAxis > AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
+				vertAxis < -AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
+				horizAxis > AXIS_THRESHOLD ? this.inputPad.right = true : this.inputPad.right = false;
+				horizAxis < -AXIS_THRESHOLD ? this.inputPad.left = true : this.inputPad.left = false;
+			}
+		}
+	}
+
+	resetGamepad(){
+		this.inputPad = {
+			up: false,
+			down: false,
+			left: false,
+			right: false,
+			a: false,
+			x: false,
+		};
+	}
+
+	gamepadEventDisconnect(){
+        console.log("Controller disconnected!");
+
+        // clear the gamepad
+        this.gamepad = null;
+        this.gamepadConnected = false;
+
+        // resets inputs when disconnected
+        this.resetGamepad();
+    }
 
 	listenUpdate(){
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this); 
@@ -39,6 +122,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	update(){
 		if (!this.active){ return; }
 
+		this.handleGamepadAxis();
 		this.handleInput();
 
 		if (this.isDashing){
@@ -71,11 +155,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		this.onGround = this.body.blocked.down;
 
-		if (keyX && this.canDash && 
-			(keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown)){
+		if ((keyX || this.inputPad.x) && this.canDash && 
+			((keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown) ||
+			(this.inputPad.right || this.inputPad.left || this.inputPad.up || this.inputPad.down))){
 			this.isDashing = true;
 
 			var dx = 0, dy = 0;
+
+			if (this.inputPad.right) dx = 1; 
+			if (this.inputPad.left) dx = -1; 
+			if (this.inputPad.up) dy = 1
+			if (this.inputPad.down) dy = -1;
 
 			if (keyRight.isDown) dx = 1; 
 			if (keyLeft.isDown) dx = -1; 
@@ -90,9 +180,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	basicMovement(keyLeft, keyRight, keyUp, upOnce){
 		if (this.canMove){
-			if (keyLeft.isDown){
+			if (keyLeft.isDown || this.inputPad.left){
 				this.setAccelerationX(-ACCELERATION);
-			} else if (keyRight.isDown){
+			} else if (keyRight.isDown || this.inputPad.right){
 				this.setAccelerationX(ACCELERATION);
 			} else {
 				if (this.onGround){
@@ -110,7 +200,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// handle long jump press
-		if (upOnce && this.canJump && this.onGround){
+		if ((upOnce || this.inputPad.aOnce) && this.canJump && this.onGround){
 			this.jumpTimer = 1;
 			this.canJump = false;
 			this.isJumping = true;
@@ -119,7 +209,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			setTimeout(() => {
 				this.canJump = true;
 			}, 100);
-		} else if (keyUp.isDown && this.jumpTimer != 0){
+		} else if ((keyUp.isDown || this.inputPad.a) && this.jumpTimer != 0){
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
 			} else {
