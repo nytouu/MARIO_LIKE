@@ -196,7 +196,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isDashing = false;
 		this.canMove = true;
 
-		// this.setTint(0xffffff);
 		this.setGravity(0, GRAVITY);
 	}
 }

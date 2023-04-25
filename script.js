@@ -15,7 +15,6 @@ var config =
         default: 'arcade',
         arcade:
         {
-            // gravity: { y: GRAVITY },
             debug: true
         }
     },
