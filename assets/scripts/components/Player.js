@@ -41,23 +41,32 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			x: false,
 		};
 
-		this.scene.input.gamepad.on('connected', () => {
-            this.gamepad = this.scene.input.gamepad.pad1;
-            this.gamepadEventConnect(this);
-        });
+		this.scene.input.gamepad.on('connected', this.gamepadEventConnect, this);
         this.scene.input.gamepad.on('disconnected', this.gamepadEventDisconnect, this);
 	}
 
-	gamepadEventConnect(){
-        console.log("Controller connected!");
+	gamepadEventConnect() {
+		console.log("Controller connected!");
+        this.gamepad = this.scene.input.gamepad.pad1;
 
-        this.gamepad.on('down', () => {
-            this.handleGamepadButtons();
-        });
-        this.gamepad.on('up', () => {
-            this.handleGamepadButtons();
-        });
+		this.gamepad.on("down", () => {
+			this.handleGamepadButtons();
+		});
+		this.gamepad.on("up", () => {
+			this.handleGamepadButtons();
+		});
 	}
+
+    gamepadEventDisconnect(){
+        console.log("Controller disconnected!");
+
+        // clear the gamepad
+        this.gamepad = null;
+        this.gamepadConnected = false;
+
+        // resets inputs when disconnected
+        this.resetGamepad();
+    }
 
 	handleGamepadButtons(){
 		const buttonA = this.gamepad.buttons[BUTTON_A];
@@ -103,17 +112,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			x: false,
 		};
 	}
-
-	gamepadEventDisconnect(){
-        console.log("Controller disconnected!");
-
-        // clear the gamepad
-        this.gamepad = null;
-        this.gamepadConnected = false;
-
-        // resets inputs when disconnected
-        this.resetGamepad();
-    }
 
 	listenUpdate(){
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this); 
