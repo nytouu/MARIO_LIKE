@@ -1,6 +1,5 @@
 export class Level extends Phaser.Scene {
 	init() {
-
 		this.shouldPause = false;
 		this.isPaused = false;
 	}
