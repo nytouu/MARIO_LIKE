@@ -17,8 +17,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	initPlayer(){
 		this.setGravity(0,GRAVITY);
 		this.setMaxVelocity(XSPEED, YSPEED);
-		this.setSize(16, 16);
-		this.setOffset(8, 8);
+		this.setSize(8, 16);
+		this.setOffset(12, 8);
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
 
