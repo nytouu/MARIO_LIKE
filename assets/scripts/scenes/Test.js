@@ -22,7 +22,7 @@ export class Test extends Level {
 		layer.setCollisionByProperty({isSolid: true});
 		this.physics.add.collider(this.player, layer);
 
-		this.cameras.main.startFollow(this.player).setLerp(0.10);
+		this.cameras.main.startFollow(this.player, false, LERP, LERP);
 		this.cameras.main.setZoom(5);
 	}
 
