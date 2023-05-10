@@ -137,6 +137,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		if (this.isDashing && this.isJumping && this.onGround){
+			// slow down after hyper dash
+			setTimeout(() => { 
+				!this.isDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+			}, 200);
+			setTimeout(() => { 
+				!this.isDashing && this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+			}, 400);
+			setTimeout(() => {
+				!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
+			}, 600);
 			this.interruptDash();
 		}
 		this.removeTrail();
