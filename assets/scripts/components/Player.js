@@ -2,8 +2,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, hp){
 		super(scene, x, y);
 
-		this.texture = "player";
-		this.setTexture(this.texture);
+		this.texture = "dark_idle";
+		this.setTexture(this.texture)
 
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
@@ -17,6 +17,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	initPlayer(){
 		this.setGravity(0,GRAVITY);
 		this.setMaxVelocity(XSPEED, YSPEED);
+		this.setSize(16, 16);
+		this.setOffset(8, 8);
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
 
@@ -81,11 +83,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	handleGamepadAxis(){
 		if (this.gamepad){
 
-			const horizAxis = this.gamepad.axes[0].value;
-			const vertAxis = this.gamepad.axes[1].value;
+			const horizAxis = this.gamepad.axes[HORIZONTAL_AXIS].value;
+			const vertAxis = this.gamepad.axes[VERTICAL_AXIS].value;
 
-			const dpadHorizAxis = this.gamepad.axes[6].value;
-			const dpadVertAxis = this.gamepad.axes[7].value;
+			const dpadHorizAxis = this.gamepad.axes[DPAD_HORIZONTAL_AXIS].value;
+			const dpadVertAxis = this.gamepad.axes[DPAD_VERTICAL_AXIS].value;
 
 			if (horizAxis < AXIS_THRESHOLD && horizAxis > -AXIS_THRESHOLD && 
 				vertAxis < AXIS_THRESHOLD && vertAxis > -AXIS_THRESHOLD){
@@ -156,19 +158,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if ((keyX || this.inputPad.x) && this.canDash && 
 			((keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown) ||
 			(this.inputPad.right || this.inputPad.left || this.inputPad.up || this.inputPad.down))){
-			this.isDashing = true;
 
 			var dx = 0, dy = 0;
 
 			if (this.inputPad.right) dx = 1; 
 			if (this.inputPad.left) dx = -1; 
 			if (this.inputPad.up) dy = 1
-			if (this.inputPad.down) dy = -1;
 
 			if (keyRight.isDown) dx = 1; 
 			if (keyLeft.isDown) dx = -1; 
 			if (keyUp.isDown) dy = -1
-			if (keyDown.isDown) dy = 1;
+
+			if (!this.onGround){
+				if (this.inputPad.down) dy = -1;
+				if (keyDown.isDown) dy = 1;
+			}
 
 			this.dash(dx, dy);
 		}
@@ -179,9 +183,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	basicMovement(keyLeft, keyRight, keyUp, upOnce){
 		if (this.canMove){
 			if (keyLeft.isDown || this.inputPad.left){
+				this.setFlipX(0);
+				this.anims.play("dark_run", true);
 				this.setAccelerationX(-ACCELERATION);
 			} else if (keyRight.isDown || this.inputPad.right){
+				this.setFlipX(1);
 				this.setAccelerationX(ACCELERATION);
+				this.anims.play("dark_run", true);
 			} else {
 				if (this.onGround){
 					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
@@ -193,6 +201,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
 					this.setVelocityX(0);
 					this.setAccelerationX(0);
+					this.anims.play("dark_idle", true);
 				}
 			}
 		}
@@ -223,6 +232,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (dx == 0 && dy == 0)
 			return
 		else {
+			this.isDashing = true;
+
 			this.setGravity(0,1); // y gravity to keep this.onGround true when needed
 			this.setAcceleration(0,0);
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
