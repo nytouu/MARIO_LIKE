@@ -8,13 +8,16 @@ export class Test extends Level {
 
 	preload(){
 		this.load.tilemapTiledJSON("test_map", "assets/tiled/test.json");
+		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 	}
 
 	create(){
 		const test_map = this.add.tilemap("test_map");
+		this.add.shader('shader_thing', 100, 100, 800, 600);
 		const tileset =
 			test_map.addTilesetImage("placeholder", "placeholder");
 		const layer = test_map.createLayer("tiles", tileset);
+
 
 		this.player = new Player(this, 100, 100, 5);
 		this.player.setCollideWorldBounds(true);
