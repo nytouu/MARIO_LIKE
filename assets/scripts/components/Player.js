@@ -28,6 +28,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isDashing = false;
 		this.isJumping = false;
 		this.jumpTimer = 0;
+		this.dashCounter = 0;
 
 		this.onGround = this.body.blocked.down;
 
@@ -267,21 +268,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	drawDashTrail(){
-		const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
-			.setDepth(100)
-			.setAlpha(0.8);
-		this.scene.tweens.addCounter({
-			from: 255,
-			to: 0,
-			duration: 300,
-			onUpdate: function (tween)
-			{
-				const valueGB = Math.floor(tween.getValue());
-				const valueR = 255 + Math.floor(Math.floor(tween.getValue())/1.82);
+		this.dashCounter++;
 
-				silhouette.setTintFill(Phaser.Display.Color.GetColor(valueR, valueGB, valueGB));   
-			}
-		});
+		if (this.dashCounter % DASH_TRAIL_INTERVAL == 0) {
+			const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
+				.setDepth(100)
+				.setAlpha(0.8);
+			this.scene.tweens.addCounter({
+				from: 255,
+				to: 0,
+				duration: 300,
+				onUpdate: function (tween) {
+					const G = 255 + Math.floor(Math.floor(tween.getValue())/1.82);
+					const RB = Math.floor(tween.getValue());
+
+					silhouette.setTintFill(Phaser.Display.Color.GetColor(RB, G, RB));   
+				}
+			});
+		}
 	}
 
 	removeTrail(){
