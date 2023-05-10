@@ -6,6 +6,7 @@ export class Preload extends Level {
 	}
 
 	preload(){
+		this.load.image("placeholder", "assets/imgs/placeholder.png");
 		this.load.spritesheet("player_bright_run", "assets/imgs/player/bright_run.png", 
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_run", "assets/imgs/player/dark_run.png",
