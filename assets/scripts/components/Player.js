@@ -91,13 +91,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			if (horizAxis < AXIS_THRESHOLD && horizAxis > -AXIS_THRESHOLD && 
 				vertAxis < AXIS_THRESHOLD && vertAxis > -AXIS_THRESHOLD){
-				dpadVertAxis > AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
-				dpadVertAxis < -AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
+				dpadVertAxis < -AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
+				dpadVertAxis > AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
 				dpadHorizAxis > AXIS_THRESHOLD ? this.inputPad.right = true : this.inputPad.right = false;
 				dpadHorizAxis < -AXIS_THRESHOLD ? this.inputPad.left = true : this.inputPad.left = false;
 			} else {
-				vertAxis > AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
-				vertAxis < -AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
+				vertAxis < -AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
+				vertAxis > AXIS_THRESHOLD ? this.inputPad.down = true : this.inputPad.down = false;
 				horizAxis > AXIS_THRESHOLD ? this.inputPad.right = true : this.inputPad.right = false;
 				horizAxis < -AXIS_THRESHOLD ? this.inputPad.left = true : this.inputPad.left = false;
 			}
@@ -163,17 +163,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			if (this.inputPad.right) dx = 1; 
 			if (this.inputPad.left) dx = -1; 
-			if (this.inputPad.up) dy = 1
+			if (this.inputPad.up) dy = -1
 
 			if (keyRight.isDown) dx = 1; 
 			if (keyLeft.isDown) dx = -1; 
 			if (keyUp.isDown) dy = -1
 
 			if (!this.onGround){
-				if (this.inputPad.down) dy = -1;
+				if (this.inputPad.down) dy = 1;
 				if (keyDown.isDown) dy = 1;
-			} else {
-				dx != 0 ? dy = 0 : 0;
 			}
 
 			this.dash(dx, dy);
