@@ -1,4 +1,6 @@
-export class Preload extends Phaser.Scene {
+import { Level } from "../components/Level.js"
+
+export class Preload extends Level {
 	constructor(){
 		super("Preload")
 	}

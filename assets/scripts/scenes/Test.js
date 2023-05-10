@@ -1,6 +1,7 @@
 import { Player } from "../components/Player.js"
+import { Level } from "../components/Level.js"
 
-export class Test extends Phaser.Scene {
+export class Test extends Level {
 	constructor(){
 		super("Test")
 	}
