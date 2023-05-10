@@ -172,6 +172,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (!this.onGround){
 				if (this.inputPad.down) dy = -1;
 				if (keyDown.isDown) dy = 1;
+			} else {
+				dx != 0 ? dy = 0 : 0;
 			}
 
 			this.dash(dx, dy);
@@ -183,12 +185,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	basicMovement(keyLeft, keyRight, keyUp, upOnce){
 		if (this.canMove){
 			if (keyLeft.isDown || this.inputPad.left){
+				this.setAccelerationX(-ACCELERATION);
 				this.setFlipX(0);
 				this.anims.play("dark_run", true);
-				this.setAccelerationX(-ACCELERATION);
 			} else if (keyRight.isDown || this.inputPad.right){
-				this.setFlipX(1);
 				this.setAccelerationX(ACCELERATION);
+				this.setFlipX(1);
 				this.anims.play("dark_run", true);
 			} else {
 				if (this.onGround){
@@ -216,7 +218,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			setTimeout(() => {
 				this.canJump = true;
 			}, 100);
-		} else if ((keyUp.isDown || this.inputPad.a) && this.jumpTimer != 0){
+		} else if ((keyUp.isDown || this.inputPad.a) && this.jumpTimer != 0 && !this.isDashing){
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
 			} else {
@@ -248,7 +250,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			this.body.velocity.normalize().scale(DASH_SPEED);
 
-			this.scene.cameras.main.shake(200, 0.0002);
+			this.scene.cameras.main.shake(150, 0.0002);
 
 			setTimeout(() => {
 				if (this.onGround){ 
