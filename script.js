@@ -4,7 +4,7 @@ import { Test as Test } from "./assets/scripts/scenes/Test.js";
 
 var config =
 {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
 	scale: {
         mode: Phaser.Scale.FIT,
         width: 1920,
