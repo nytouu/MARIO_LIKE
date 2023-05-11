@@ -26,7 +26,7 @@ export class Test extends Level {
 		this.physics.add.collider(this.player, layer);
 
 		this.cameras.main.startFollow(this.player, false, LERP, LERP);
-		this.cameras.main.setZoom(5);
+		this.cameras.main.setZoom(2);
 	}
 
     update(){

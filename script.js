@@ -7,8 +7,8 @@ var config =
     type: Phaser.WEBGL,
 	scale: {
         mode: Phaser.Scale.FIT,
-        width: 1920,
-        height: 1080
+        width: 640,
+        height: 360
     },
     physics:
     {
