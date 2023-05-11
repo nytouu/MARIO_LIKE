@@ -2,7 +2,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, hp){
 		super(scene, x, y);
 
-		this.texture = "dark_idle";
+		this.texture = "player_dark_idle";
 		this.setTexture(this.texture)
 
 		scene.add.existing(this);
