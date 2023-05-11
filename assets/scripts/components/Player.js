@@ -357,15 +357,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.dashTrailCounter % DASH_TRAIL_INTERVAL == 0) {
 			const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
 				.setDepth(100)
-				.setAlpha(0.8);
+				.setAlpha(0.9);
 
 			// change color for silhouette
 			this.scene.tweens.addCounter({
 				from: 255,
-				to: 0,
+				to: 80,
 				duration: 300,
 				onUpdate: function (tween) {
-					const G = 255 + Math.floor(Math.floor(tween.getValue())/1.82);
+					const G = 255 + Math.floor(Math.floor(tween.getValue())/1.72);
 					const RB = Math.floor(tween.getValue());
 
 					silhouette.setTintFill(Phaser.Display.Color.GetColor(RB, G, RB));   
@@ -421,30 +421,30 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	shrinkX(){
 		if (this.scaleX > SHRINK_MIN){
-			this.scaleX -= 0.05;
+			this.scaleX -= SHRINK_INCREMENT;
 		}
 	}
 
 	shrinkY(){
 		if (this.scaleY > SHRINK_MIN){
-			this.scaleY -= 0.05;
+			this.scaleY -= SHRINK_INCREMENT;
 		}
 	}
 
 	increaseX(){
 		if (this.scaleX < INCREASE_MAX){
-			this.scaleX += 0.05;
+			this.scaleX += SHRINK_INCREMENT;
 		}
 	}
 
 	increaseY(){
 		if (this.scaleY < INCREASE_MAX){
-			this.scaleY += 0.05;
+			this.scaleY += SHRINK_INCREMENT;
 		}
 	}
 
 	resetSize(){
-		this.scaleX < 1 ? this.scaleX += 0.05 : this.scaleX -= 0.05;
-		this.scaleY < 1 ? this.scaleY += 0.05 : this.scaleY -= 0.05;
+		this.scaleX < 1 ? this.scaleX += SHRINK_INCREMENT : this.scaleX -= SHRINK_INCREMENT;
+		this.scaleY < 1 ? this.scaleY += SHRINK_INCREMENT : this.scaleY -= SHRINK_INCREMENT;
 	}
 }
