@@ -18,7 +18,7 @@ export class Test extends Level {
 		const layer = test_map.createLayer("tiles", tileset);
 
 
-		this.player = new Player(this, 100, 100, 5);
+		this.player = new Player(this, 100, 100);
 
 		layer.setCollisionByProperty({isSolid: true});
 		this.physics.add.collider(this.player, layer);
