@@ -55,7 +55,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	gamepadEventConnect() {
 		console.log("Controller connected!");
         this.gamepad = this.scene.input.gamepad.pad1;
-
+		
 		this.gamepad.on("down", () => {
 			this.handleGamepadButtons("down");
 		});
@@ -260,9 +260,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		} else if (upOnce || this.inputPad.aOnce && !this.onGround){
 
 			if (this.body.blocked.right){
-				this.walljump(-1);
+				this.walljump(LEFT);
 			} else if (this.body.blocked.left){
-				this.walljump(1);
+				this.walljump(RIGHT);
 			}
 		}
 	}

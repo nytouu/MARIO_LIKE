@@ -18,3 +18,5 @@ const DPAD_VERTICAL_AXIS = 7;
 const DASH_TRAIL_INTERVAL = 3;
 const DASH_BOING_INTERVAL = 7;
 const PI = 3.141592654;
+const RIGHT = 1;
+const LEFT = -1;
