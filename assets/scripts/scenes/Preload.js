@@ -17,6 +17,12 @@ export class Preload extends Level {
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("dash_boing", "assets/imgs/dash_boing.png",
 			{frameWidth: 16, frameHeight: 32});
+		this.load.spritesheet("player_dark_air", "assets/imgs/player/dark_air.png", 
+			{frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet("player_dark_jump", "assets/imgs/player/dark_jump.png", 
+			{frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet("player_dark_land", "assets/imgs/player/dark_land.png", 
+			{frameWidth: 32, frameHeight: 32});
 		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 	}
 
@@ -48,6 +54,27 @@ export class Preload extends Level {
 				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : -1
+		});
+		this.anims.create({
+			key : 'dark_jump',
+			frames : this.anims.generateFrameNumbers('player_dark_jump',
+				{start : 0, end : 5}),
+			frameRate : 20,
+			repeat : 0
+		});
+		this.anims.create({
+			key : 'dark_air',
+			frames : this.anims.generateFrameNumbers('player_dark_air',
+				{start : 0, end : 7}),
+			frameRate : 10,
+			repeat : -1
+		});
+		this.anims.create({
+			key : 'dark_land',
+			frames : this.anims.generateFrameNumbers('player_dark_land',
+				{start : 0, end : 5}),
+			frameRate : 20,
+			repeat : 0
 		});
 		this.anims.create({
 			key : 'boing',

@@ -5,6 +5,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.texture = "player_dark_idle";
 		this.setTexture(this.texture)
 
+		this.anims.currentAnim = true;
+
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 
@@ -23,6 +25,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canMove = true;
 		this.canJump = true;
 		this.canDash = true;
+		this.canLand = true;
 		this.isDashing = false;
 		this.isJumping = false;
 		this.hyperDashing = false;
@@ -157,8 +160,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.hyperDashing = false;
             this.canDash = true;
             this.setTint(0xffffff);
-		} else if (this.scaleX != 1 || this.scaleY != 1) {
+		}
+
+		if ((this.scaleX != 1 || this.scaleY != 1) && !this.hyperDashing)
 			this.resetSize();
+
+		if (!this.onGround){
+			this.canLand = true;
+			this.anims.chain("dark_air");
+		} else if (this.canLand && this.body.velocity.y == 0){
+			this.anims.play("dark_land");
+			this.canLand = false;
 		}
 
 		// slow down after hyper dash
@@ -236,11 +248,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (keyLeft.isDown || this.inputPad.left){
 				this.setAccelerationX(-ACCELERATION);
 				this.setFlipX(0);
-				this.anims.play("dark_run", true);
+
+				if (this.anims.currentAnim.key == "dark_land"){
+					this.onGround && this.anims.chain("dark_run");
+				} else {
+					this.onGround && this.anims.play("dark_run", true);
+				}
 			} else if (keyRight.isDown || this.inputPad.right){
 				this.setAccelerationX(ACCELERATION);
 				this.setFlipX(1);
-				this.anims.play("dark_run", true);
+
+				if (this.anims.currentAnim.key == "dark_land"){
+					this.onGround && this.anims.chain("dark_run");
+				} else {
+					this.onGround && this.anims.play("dark_run", true);
+				}
 			} else {
 				if (this.onGround){
 					// set ground acceleration
@@ -254,7 +276,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
 					this.setVelocityX(0);
 					this.setAccelerationX(0);
-					this.anims.play("dark_idle", true);
+
+					if (this.anims.currentAnim.key == "dark_land"){
+						this.onGround && this.anims.chain("dark_idle");
+					} else {
+						this.onGround && this.anims.play("dark_idle", true);
+					}
 				}
 			}
 		}
@@ -265,6 +292,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.canJump = false;
 			this.isJumping = true;
 			this.setVelocityY(-YSPEED);
+
+			this.anims.play("dark_jump");
 
 			setTimeout(() => {
 				this.canJump = true;
