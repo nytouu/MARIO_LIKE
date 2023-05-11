@@ -8,7 +8,6 @@ export class Test extends Level {
 
 	preload(){
 		this.load.tilemapTiledJSON("test_map", "assets/tiled/test.json");
-		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 	}
 
 	create(){
@@ -20,7 +19,6 @@ export class Test extends Level {
 
 
 		this.player = new Player(this, 100, 100, 5);
-		this.player.setCollideWorldBounds(true);
 
 		layer.setCollisionByProperty({isSolid: true});
 		this.physics.add.collider(this.player, layer);

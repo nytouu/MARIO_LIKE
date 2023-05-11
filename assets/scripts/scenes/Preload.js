@@ -15,6 +15,7 @@ export class Preload extends Level {
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_idle", "assets/imgs/player/dark_idle.png",
 			{frameWidth: 32, frameHeight: 32});
+		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 	}
 
 	create(){
