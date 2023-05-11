@@ -27,12 +27,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canDash = true;
 		this.isDashing = false;
 		this.isJumping = false;
+		this.hyperDashing = false;
 		this.jumpTimer = 0;
-		this.dashCounter = 0;
+		this.dashTrailCounter = 0;
+		this.dashBoingCounter = 0;
 
 		this.onGround = this.body.blocked.down;
 
 		this.dashTrail = this.scene.add.group();
+		this.dashBoing = this.scene.add.group();
 
 		this.inputPad = {
 			up: false,
@@ -136,11 +139,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.handleInput();
 
 		if (this.isDashing){
-			this.drawDashTrail() 
+			this.drawDashTrail();
+		} else if (this.hyperDashing){
+			this.drawDashBoing() ;
 		} else if (this.onGround){
             // FIXME don't do this every frame
 			this.setMaxVelocity(XSPEED, YSPEED);
             this.isJumping = false;
+			this.hyperDashing = false;
             this.canDash = true;
             this.setTint(0xffffff);
 		}
@@ -152,13 +158,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			}, 200);
 			setTimeout(() => { 
 				!this.isDashing && this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+				this.hyperDashing = false;
 			}, 400);
 			setTimeout(() => {
 				!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
 			}, 600);
 			this.interruptDash();
+			this.hyperDashing = true;
 		}
 		this.removeTrail();
+		this.removeBoing();
 
 		this.inputPad.aOnce = 0;
 		this.inputPad.xOnce = 0;
@@ -262,6 +271,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.jumpTimer = 1;
 		this.canJump = false;
 		this.isJumping = true;
+		this.hyperDashing = false;
 
 		this.setAccelerationX(dir * WALLJUMP_XSPEED);
 		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED);
@@ -299,7 +309,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			this.body.velocity.normalize().scale(DASH_SPEED);
 
-			this.scene.cameras.main.shake(150, 0.0002);
+			this.scene.cameras.main.shake(150, 0.002);
 
 			setTimeout(() => {
 				if (this.onGround){ 
@@ -318,9 +328,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	drawDashTrail(){
-		this.dashCounter++;
+		this.dashTrailCounter++;
 
-		if (this.dashCounter % DASH_TRAIL_INTERVAL == 0) {
+		if (this.dashTrailCounter % DASH_TRAIL_INTERVAL == 0) {
 			const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
 				.setDepth(100)
 				.setAlpha(0.8);
@@ -338,10 +348,30 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
+
+	drawDashBoing(){
+		this.dashBoingCounter++;
+
+		if (this.dashBoingCounter % DASH_BOING_INTERVAL == 0) {
+			const boing = this.dashBoing.create(this.x, this.y, "dash_boing")
+				.setDepth(80)
+				.setAlpha(0.8);
+			boing.setAngle(this.body.velocity.angle() * 180 / PI);
+			boing.anims.play("boing");
+		}
+	}
+
 	removeTrail(){
 		this.dashTrail.children.each(function (silhouette) {
 			silhouette.alpha -= 0.05;
 			silhouette.alpha <= 0 && silhouette.destroy();
+		})
+	}
+
+	removeBoing(){
+		this.dashBoing.children.each(function (boing) {
+			boing.alpha -= 0.05;
+			boing.alpha <= 0 && boing.destroy();
 		})
 	}
 

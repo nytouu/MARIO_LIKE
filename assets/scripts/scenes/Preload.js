@@ -15,6 +15,8 @@ export class Preload extends Level {
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_idle", "assets/imgs/player/dark_idle.png",
 			{frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet("dash_boing", "assets/imgs/dash_boing.png",
+			{frameWidth: 16, frameHeight: 32});
 		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 	}
 
@@ -47,6 +49,14 @@ export class Preload extends Level {
 			frameRate : 10,
 			repeat : -1
 		});
+		this.anims.create({
+			key : 'boing',
+			frames : this.anims.generateFrameNumbers('dash_boing',
+				{start : 0, end : 7}),
+			frameRate : 15,
+			repeat : -1
+		});
+
 
 		this.scene.start("Test");
 	}
