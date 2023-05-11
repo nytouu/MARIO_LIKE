@@ -276,6 +276,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				// jump higher if holding jump
 				this.jumpTimer++;
 				this.setVelocityY(-YSPEED);
+
+				// don't incease height if player hits his head
+				if (this.body.blocked.up){
+					this.jumpTimer = 0;
+				}
 			}
 		} else if (this.jumpTimer != 0){
 			this.jumpTimer = 0;
