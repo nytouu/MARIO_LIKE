@@ -20,3 +20,5 @@ const DASH_BOING_INTERVAL = 7;
 const PI = 3.141592654;
 const RIGHT = 1;
 const LEFT = -1;
+const SHRINK_MIN = 0.8;
+const INCREASE_MAX = 1.2;

@@ -149,7 +149,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.isDashing){
 			this.drawDashTrail();
 		} else if (this.hyperDashing){
-			this.drawDashBoing() ;
+			this.hyperDash();
 		} else if (this.onGround){
             // FIXME don't do this every frame
 			this.setMaxVelocity(XSPEED, YSPEED);
@@ -157,6 +157,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.hyperDashing = false;
             this.canDash = true;
             this.setTint(0xffffff);
+		} else if (this.scaleX != 1 || this.scaleY != 1) {
+			this.resetSize();
 		}
 
 		// slow down after hyper dash
@@ -407,5 +409,42 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canMove = true;
 
 		this.setGravity(0, GRAVITY);
+	}
+
+	hyperDash(){
+		// squeeze player sprite
+		this.shrinkY();
+		this.increaseX();
+
+		this.drawDashBoing() ;
+	}
+
+	shrinkX(){
+		if (this.scaleX > SHRINK_MIN){
+			this.scaleX -= 0.05;
+		}
+	}
+
+	shrinkY(){
+		if (this.scaleY > SHRINK_MIN){
+			this.scaleY -= 0.05;
+		}
+	}
+
+	increaseX(){
+		if (this.scaleX < INCREASE_MAX){
+			this.scaleX += 0.05;
+		}
+	}
+
+	increaseY(){
+		if (this.scaleY < INCREASE_MAX){
+			this.scaleY += 0.05;
+		}
+	}
+
+	resetSize(){
+		this.scaleX < 1 ? this.scaleX += 0.05 : this.scaleX -= 0.05;
+		this.scaleY < 1 ? this.scaleY += 0.05 : this.scaleY -= 0.05;
 	}
 }
