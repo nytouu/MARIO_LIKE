@@ -33,10 +33,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.dashBoingCounter = 0;
 
 		this.onGround = this.body.blocked.down;
+		this.blockedLeft = this.body.blocked.left;
+		this.blockedRight = this.body.blocked.right;
 
+		// groups for dash and "boing" effects
 		this.dashTrail = this.scene.add.group();
 		this.dashBoing = this.scene.add.group();
 
+		// gamepad controls
 		this.inputPad = {
 			up: false,
 			down: false,
@@ -56,6 +60,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		console.log("Controller connected!");
         this.gamepad = this.scene.input.gamepad.pad1;
 		
+		// setup events
 		this.gamepad.on("down", () => {
 			this.handleGamepadButtons("down");
 		});
@@ -80,9 +85,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		const buttonX = this.gamepad.buttons[BUTTON_X];
 
 		this.inputPad.x = buttonX.value;
-
 		this.inputPad.a = buttonA.value;
 
+		// aOnce and xOnce are true during 1 frame even when holding a or x
 		if (event == "down") {
 			if (buttonA.value)
 				this.inputPad.aOnce = buttonA.value;
@@ -93,13 +98,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	handleGamepadAxis(){
 		if (this.gamepad){
-
+			// get axis values
 			const horizAxis = this.gamepad.axes[HORIZONTAL_AXIS].value;
 			const vertAxis = this.gamepad.axes[VERTICAL_AXIS].value;
 
+			// get dpad values
 			const dpadHorizAxis = this.gamepad.axes[DPAD_HORIZONTAL_AXIS].value;
 			const dpadVertAxis = this.gamepad.axes[DPAD_VERTICAL_AXIS].value;
 
+			// set input values according to axis/dpad values
 			if (horizAxis < AXIS_THRESHOLD && horizAxis > -AXIS_THRESHOLD && 
 				vertAxis < AXIS_THRESHOLD && vertAxis > -AXIS_THRESHOLD){
 				dpadVertAxis < -AXIS_THRESHOLD ? this.inputPad.up = true : this.inputPad.up = false;
@@ -116,6 +123,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	resetGamepad(){
+		// avoid ghost inputs when disconnecting gamepad
 		this.inputPad = {
 			up: false,
 			down: false,
@@ -129,12 +137,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	listenUpdate(){
+		// "attach" player update with scene update
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this); 
 	}
 
 	update(){
 		if (!this.active){ return; }
-
+		
+		// handle inputs
 		this.handleGamepadAxis();
 		this.handleInput();
 
@@ -151,8 +161,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.setTint(0xffffff);
 		}
 
+		// slow down after hyper dash
 		if (this.isDashing && this.isJumping && this.onGround){
-			// slow down after hyper dash
 			setTimeout(() => { 
 				!this.isDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
 			}, 200);
@@ -166,14 +176,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.interruptDash();
 			this.hyperDashing = true;
 		}
+
 		this.removeTrail();
 		this.removeBoing();
 
+		// reset these values
 		this.inputPad.aOnce = 0;
 		this.inputPad.xOnce = 0;
 	}
 
 	handleInput(){
+		// setup keyboard input keys
 		const {
 			left: keyLeft,
 			right: keyRight,
@@ -185,14 +198,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
 		);
 
+		// set player properties
 		this.onGround = this.body.blocked.down;
+		this.blockedLeft = this.body.blocked.left;
+		this.blockedRight = this.body.blocked.right;
 
+		// handle dash
 		if ((keyX || this.inputPad.xOnce) && this.canDash && 
 			((keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown) ||
 			(this.inputPad.right || this.inputPad.left || this.inputPad.up || this.inputPad.down))){
 
 			var dx = 0, dy = 0;
-
+			
+			// dash direction
 			if (this.inputPad.right) dx = 1; 
 			if (this.inputPad.left) dx = -1; 
 			if (this.inputPad.up) dy = -1
@@ -201,6 +219,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (keyLeft.isDown) dx = -1; 
 			if (keyUp.isDown) dy = -1
 
+			// down/right or down/left while on ground are the same as left or right
 			if (!this.onGround){
 				if (this.inputPad.down) dy = 1;
 				if (keyDown.isDown) dy = 1;
@@ -224,8 +243,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.anims.play("dark_run", true);
 			} else {
 				if (this.onGround){
+					// set ground acceleration
 					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
 				} else {
+					// set air acceleration
 					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
 				}
 
@@ -252,22 +273,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
 			} else {
+				// jump higher if holding jump
 				this.jumpTimer++;
 				this.setVelocityY(-YSPEED);
 			}
 		} else if (this.jumpTimer != 0){
 			this.jumpTimer = 0;
 		} else if (upOnce || this.inputPad.aOnce && !this.onGround){
-
-			if (this.body.blocked.right){
-				this.walljump(LEFT);
-			} else if (this.body.blocked.left){
-				this.walljump(RIGHT);
+			// handle walljumps
+			if (this.blockedRight){
+				this.wallJump(LEFT);
+			} else if (this.blockedLeft){
+				this.wallJump(RIGHT);
 			}
 		}
 	}
 
-	walljump(dir){
+	wallJump(dir){
 		this.jumpTimer = 1;
 		this.canJump = false;
 		this.isJumping = true;
@@ -277,6 +299,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED);
 		this.setVelocity(dir * WALLJUMP_XSPEED, -WALLJUMP_XSPEED);
 
+		// slow down after wall jumping
 		setTimeout(() => { 
 			this.canJump = true;
 			this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, WALLJUMP_YSPEED / 1.2);
@@ -299,6 +322,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setAcceleration(0,0);
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
 
+			// player is in dash state
 			this.isDashing = true;
 			this.isJumping = false;
 			this.canDash = false;
@@ -334,6 +358,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
 				.setDepth(100)
 				.setAlpha(0.8);
+
+			// change color for silhouette
 			this.scene.tweens.addCounter({
 				from: 255,
 				to: 0,
@@ -356,7 +382,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			const boing = this.dashBoing.create(this.x, this.y, "dash_boing")
 				.setDepth(80)
 				.setAlpha(0.8);
+			
+			// this.body.velocity.angle is in rad but setAngle requires a value in degrees
 			boing.setAngle(this.body.velocity.angle() * 180 / PI);
+
 			boing.anims.play("boing");
 		}
 	}
