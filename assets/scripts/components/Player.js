@@ -302,13 +302,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// slow down after wall jumping
 		setTimeout(() => { 
 			this.canJump = true;
-			this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, WALLJUMP_YSPEED / 1.2);
+			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, WALLJUMP_YSPEED / 1.2);
 		}, 100);
 		setTimeout(() => { 
-			this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED);
+			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED);
 		}, 200);
 		setTimeout(() => {
-			this.setMaxVelocity(XSPEED, YSPEED);
+			!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
 		}, 300);
 	}
 	
