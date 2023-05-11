@@ -21,28 +21,28 @@ export class Preload extends Level {
 		this.anims.create({
 			key : 'bright_run',
 			frames : this.anims.generateFrameNumbers('player_bright_run',
-				{start : 0, end : 8}),
+				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : -1
 		});
 		this.anims.create({
 			key : 'dark_run',
 			frames : this.anims.generateFrameNumbers('player_dark_run',
-				{start : 0, end : 8}),
+				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : -1
 		});
 		this.anims.create({
 			key : 'bright_idle',
 			frames : this.anims.generateFrameNumbers('player_bright_idle',
-				{start : 0, end : 8}),
+				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : -1
 		});
 		this.anims.create({
 			key : 'dark_idle',
 			frames : this.anims.generateFrameNumbers('player_dark_idle',
-				{start : 0, end : 8}),
+				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : -1
 		});
