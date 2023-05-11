@@ -248,7 +248,35 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		} else if (this.jumpTimer != 0){
 			this.jumpTimer = 0;
+		} else if (upOnce || this.inputPad.aOnce && !this.onGround){
+
+			if (this.body.blocked.right){
+				this.walljump(-1);
+			} else if (this.body.blocked.left){
+				this.walljump(1);
+			}
 		}
+	}
+
+	walljump(dir){
+		this.jumpTimer = 1;
+		this.canJump = false;
+		this.isJumping = true;
+
+		this.setAccelerationX(dir * WALLJUMP_XSPEED);
+		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED);
+		this.setVelocity(dir * WALLJUMP_XSPEED, -WALLJUMP_XSPEED);
+
+		setTimeout(() => { 
+			this.canJump = true;
+			this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, WALLJUMP_YSPEED / 1.2);
+		}, 100);
+		setTimeout(() => { 
+			this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED);
+		}, 200);
+		setTimeout(() => {
+			this.setMaxVelocity(XSPEED, YSPEED);
+		}, 300);
 	}
 	
 	dash(dx, dy){
