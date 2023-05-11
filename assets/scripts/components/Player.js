@@ -42,6 +42,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			a: false,
 			aOnce: false,
 			x: false,
+			xOnce: false,
 		};
 
 		this.scene.input.gamepad.on('connected', this.gamepadEventConnect, this);
@@ -53,10 +54,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.gamepad = this.scene.input.gamepad.pad1;
 
 		this.gamepad.on("down", () => {
-			this.handleGamepadButtons();
+			this.handleGamepadButtons("down");
 		});
 		this.gamepad.on("up", () => {
-			this.handleGamepadButtons();
+			this.handleGamepadButtons("up");
 		});
 	}
 
@@ -71,14 +72,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.resetGamepad();
     }
 
-	handleGamepadButtons(){
+	handleGamepadButtons(event){
 		const buttonA = this.gamepad.buttons[BUTTON_A];
 		const buttonX = this.gamepad.buttons[BUTTON_X];
 
 		this.inputPad.x = buttonX.value;
 
 		this.inputPad.a = buttonA.value;
-		this.inputPad.aOnce = buttonA.value;
+
+		if (event == "down") {
+			if (buttonA.value)
+				this.inputPad.aOnce = buttonA.value;
+			if (buttonX.value)
+				this.inputPad.xOnce = buttonX.value;
+		}
 	}
 
 	handleGamepadAxis(){
@@ -113,6 +120,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			right: false,
 			a: false,
 			x: false,
+			aOnce: false,
+			xOnce: false,
 		};
 	}
 
@@ -150,6 +159,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.interruptDash();
 		}
 		this.removeTrail();
+
+		this.inputPad.aOnce = 0;
+		this.inputPad.xOnce = 0;
 	}
 
 	handleInput(){
@@ -166,7 +178,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		this.onGround = this.body.blocked.down;
 
-		if ((keyX || this.inputPad.x) && this.canDash && 
+		if ((keyX || this.inputPad.xOnce) && this.canDash && 
 			((keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown) ||
 			(this.inputPad.right || this.inputPad.left || this.inputPad.up || this.inputPad.down))){
 
