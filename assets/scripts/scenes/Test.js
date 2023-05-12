@@ -28,8 +28,8 @@ export class Test extends Level {
 	}
 
     update(){
-		const tileRight = this.layer.getTileAtWorldXY(this.player.x + 16, this.player.y);
-		const tileLeft = this.layer.getTileAtWorldXY(this.player.x - 16, this.player.y);
+		const tileRight = this.layer.getTileAtWorldXY(this.player.x + 6, this.player.y);
+		const tileLeft = this.layer.getTileAtWorldXY(this.player.x - 6, this.player.y);
 
 		if (this.player.getRightCenter().x + WALL_DISTANCE < tileRight.right && tileRight.collides){
 			this.player.collideRight = true;
