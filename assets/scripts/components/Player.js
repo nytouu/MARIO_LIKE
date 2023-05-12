@@ -167,6 +167,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		if (!this.onGround){
 			this.canLand = true;
+			if (this.anims.currentAnim.key == "dark_wall" && !(this.blockedRight || this.blockedLeft))
+				this.anims.stop();
 			this.anims.chain("dark_air");
 		} else if (this.canLand && this.body.velocity.y == 0){
 			this.anims.play("dark_land");
@@ -313,12 +315,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		} else if (this.jumpTimer != 0){
 			this.jumpTimer = 0;
-		} else if (upOnce || this.inputPad.aOnce && !this.onGround){
-			// handle walljumps
+		} else if (!this.onGround){
 			if (this.blockedRight){
-				this.wallJump(LEFT);
+				// grip wall
+				this.anims.play("dark_wall");
+				!this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
+				// handle walljumps
+				if (upOnce || this.inputPad.aOnce){
+					this.wallJump(LEFT);
+				}
 			} else if (this.blockedLeft){
-				this.wallJump(RIGHT);
+				!this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
+				this.anims.play("dark_wall");
+				if (upOnce || this.inputPad.aOnce){
+					this.wallJump(RIGHT);
+				}
 			}
 		}
 	}
@@ -328,6 +339,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canJump = false;
 		this.isJumping = true;
 		this.hyperDashing = false;
+
+		this.anims.play("dark_air");
 
 		this.setAccelerationX(dir * WALLJUMP_XSPEED);
 		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED);
