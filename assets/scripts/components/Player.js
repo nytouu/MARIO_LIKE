@@ -38,6 +38,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.blockedRight = this.body.blocked.right;
 		this.headBonk = this.body.blocked.up;
 
+		this.collideRight = false;
+		this.collideLeft = false;
+
 		// groups for dash and "boing" effects
 		this.dashTrail = this.scene.add.group();
 		this.dashBoing = this.scene.add.group();
@@ -320,17 +323,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		} else if (this.jumpTimer != 0){
 			this.jumpTimer = 0;
 		} else if (!this.onGround){
-			if (this.blockedRight){
+			if (this.blockedRight || this.collideRight){
 				// grip wall
-				this.anims.play("dark_wall");
-				!this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
+				this.blockedRight && this.anims.play("dark_wall");
+				this.blockedRight && !this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
 				// handle walljumps
 				if (upOnce || this.inputPad.aOnce){
 					this.wallJump(LEFT);
 				}
-			} else if (this.blockedLeft){
-				!this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
-				this.anims.play("dark_wall");
+			} else if (this.blockedLeft || this.collideLeft){
+				this.blockedLeft && !this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
+				this.blockedLeft && this.anims.play("dark_wall");
 				if (upOnce || this.inputPad.aOnce){
 					this.wallJump(RIGHT);
 				}
@@ -339,6 +342,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	wallJump(dir){
+		let dashWallJump = 1
+
+		// keep momentum from dash
+		if (this.isDashing)
+			dashWallJump = 2;
+
 		this.jumpTimer = 1;
 		this.canJump = false;
 		this.isJumping = true;
@@ -347,16 +356,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play("dark_air");
 
 		this.setAccelerationX(dir * WALLJUMP_XSPEED);
-		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED);
-		this.setVelocity(dir * WALLJUMP_XSPEED, -WALLJUMP_XSPEED);
+		this.setMaxVelocity(WALLJUMP_XSPEED, WALLJUMP_YSPEED * dashWallJump);
+		this.setVelocity(dir * WALLJUMP_XSPEED, -WALLJUMP_XSPEED * dashWallJump);
 
 		// slow down after wall jumping
 		setTimeout(() => { 
 			this.canJump = true;
-			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, WALLJUMP_YSPEED / 1.2);
+			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, (WALLJUMP_YSPEED * dashWallJump) / 1.2);
 		}, 100);
 		setTimeout(() => { 
-			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED);
+			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED * dashWallJump);
 		}, 200);
 		setTimeout(() => {
 			!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
