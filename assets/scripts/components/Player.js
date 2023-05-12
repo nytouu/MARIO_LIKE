@@ -36,6 +36,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.onGround = this.body.blocked.down;
 		this.blockedLeft = this.body.blocked.left;
 		this.blockedRight = this.body.blocked.right;
+		this.headBonk = this.body.blocked.up;
 
 		// groups for dash and "boing" effects
 		this.dashTrail = this.scene.add.group();
@@ -309,7 +310,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.setVelocityY(-YSPEED);
 
 				// don't incease height if player hits his head
-				if (this.body.blocked.up){
+				if (this.headBonk){
 					this.jumpTimer = 0;
 				}
 			}
