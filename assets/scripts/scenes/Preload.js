@@ -8,6 +8,7 @@ export class Preload extends Level {
 	preload(){
 		this.load.image("placeholder", "assets/imgs/placeholder.png");
 		this.load.image("player_dark_wall", "assets/imgs/player/dark_wall.png");
+		this.load.image("player_dark_dash", "assets/imgs/player/dark_dash.png");
 		this.load.spritesheet("player_bright_run", "assets/imgs/player/bright_run.png", 
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_run", "assets/imgs/player/dark_run.png",
@@ -80,6 +81,12 @@ export class Preload extends Level {
 		this.anims.create({
 			key: 'dark_wall',
 			frames: [ { key: 'player_dark_wall', frame: 0 } ],
+			frameRate: 1,
+			repeat: -1
+		});
+		this.anims.create({
+			key: 'dark_dash',
+			frames: [ { key: 'player_dark_dash', frame: 0 } ],
 			frameRate: 1,
 			repeat: -1
 		});

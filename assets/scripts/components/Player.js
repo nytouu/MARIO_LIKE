@@ -370,6 +370,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setAcceleration(0,0);
 			this.setMaxVelocity(DASH_SPEED, DASH_SPEED);
 
+			const oldAnim = this.anims.currentAnim.key;
+			this.anims.play("dark_dash");
+			this.anims.chain(oldAnim);
+
 			// player is in dash state
 			this.isDashing = true;
 			this.isJumping = false;
@@ -388,6 +392,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 					this.canDash = true;
 					this.setTint(0xffffff);
 				}
+				this.anims.stop();
 			}, DASH_TIME - DASH_RESET_TIME),
 
 			setTimeout(() => {
