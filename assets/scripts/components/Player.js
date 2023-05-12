@@ -170,6 +170,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.canLand = true;
 			if (this.anims.currentAnim.key == "dark_wall" && !(this.blockedRight || this.blockedLeft))
 				this.anims.stop();
+			if (this.anims.currentAnim.key == "dark_run")
+				this.anims.stop();
 			this.anims.chain("dark_air");
 		} else if (this.canLand && this.body.velocity.y == 0){
 			this.anims.play("dark_land");
