@@ -217,6 +217,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.onGround = this.body.blocked.down;
 		this.blockedLeft = this.body.blocked.left;
 		this.blockedRight = this.body.blocked.right;
+		this.headBonk = this.body.blocked.up;
 
 		// handle dash
 		if ((keyX || this.inputPad.xOnce) && this.canDash && 
