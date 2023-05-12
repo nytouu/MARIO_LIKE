@@ -395,13 +395,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 					this.canDash = true;
 					this.setTint(0xffffff);
 				}
-				this.anims.stop();
 			}, DASH_TIME - DASH_RESET_TIME),
 
 			setTimeout(() => {
 				this.interruptDash();
 				!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 			}, DASH_TIME);
+
+			setTimeout(() => {
+				this.anims.stop();
+			}, DASH_TIME + 100);
 
 			this.setTint(0x00ffff);
 		}
