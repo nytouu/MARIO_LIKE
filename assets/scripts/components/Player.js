@@ -405,7 +405,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.dashTrailCounter % DASH_TRAIL_INTERVAL == 0) {
 			const silhouette = this.dashTrail.create(this.x, this.y, this.texture)
 				.setDepth(100)
-				.setAlpha(0.9);
+				.setAlpha(0.9)
+				.setFlipX(this.flipX);
 
 			// change color for silhouette
 			this.scene.tweens.addCounter({
