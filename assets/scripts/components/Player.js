@@ -1,3 +1,5 @@
+import { getTimestamp } from "../components/Timer.js";
+
 export class Player extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y){
 		super(scene, x, y);
@@ -28,6 +30,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canLand = true;
 		this.isDashing = false;
 		this.isJumping = false;
+		this.wasOnGround = false;
+		this.startFallTime = getTimestamp();
 		this.hyperDashing = false;
 		this.jumpTimer = 0;
 		this.dashTrailCounter = 0;
@@ -163,6 +167,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.isJumping = false;
 			this.hyperDashing = false;
             this.canDash = true;
+			this.wasOnGround = this.onGround;
             this.setTint(0xffffff);
 		}
 
@@ -176,13 +181,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (this.anims.currentAnim.key == "dark_run")
 				this.anims.stop();
 			this.anims.chain("dark_air");
+			
+			// start coyote timer 
+			if (this.wasOnGround && !this.isJumping){
+				this.startFallTime = getTimestamp();
+				this.wasOnGround = false;
+			}
+
 		} else if (this.canLand && this.body.velocity.y == 0){
 			this.anims.play("dark_land");
 			this.canLand = false;
 		}
 
 		// slow down after hyper dash
-		if (this.isDashing && this.isJumping && this.onGround){
+		if (this.isDashing && this.isJumping){
 			setTimeout(() => { 
 				!this.isDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
 			}, 200);
@@ -296,7 +308,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// handle long jump press
-		if ((upOnce || this.inputPad.aOnce) && this.canJump && this.onGround){
+		if ((upOnce || this.inputPad.aOnce) && this.canJump 
+			&& (this.onGround || (getTimestamp() - this.startFallTime < COYOTE_TIME))){
 			this.jumpTimer = 1;
 			this.canJump = false;
 			this.isJumping = true;
