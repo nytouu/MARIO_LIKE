@@ -24,4 +24,4 @@ const SHRINK_MIN = 0.9;
 const INCREASE_MAX = 1.1;
 const SHRINK_INCREMENT = 0.05;
 const WALL_DISTANCE = 3;
-const COYOTE_TIME = 80;
+const COYOTE_TIME = 70;
