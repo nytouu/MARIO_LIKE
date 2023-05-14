@@ -225,8 +225,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			up: keyUp,
 			down: keyDown,
 		} = this.cursors;
-		const upOnce = Phaser.Input.Keyboard.JustDown(keyUp);
-        const keyX = Phaser.Input.Keyboard.JustDown(
+
+		const keyC = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
+		const keyCOnce = Phaser.Input.Keyboard.JustDown(keyC);
+
+        const keyXOnce = Phaser.Input.Keyboard.JustDown(
 			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
 		);
 
@@ -237,7 +240,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.headBonk = this.body.blocked.up;
 
 		// handle dash
-		if ((keyX || this.inputPad.xOnce) && this.canDash && 
+		if ((keyXOnce || this.inputPad.xOnce) && this.canDash && 
 			((keyRight.isDown || keyLeft.isDown || keyUp.isDown || keyDown.isDown) ||
 			(this.inputPad.right || this.inputPad.left || this.inputPad.up || this.inputPad.down))){
 
@@ -261,10 +264,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.dash(dx, dy);
 		}
 
-		this.basicMovement(keyLeft, keyRight, keyUp, upOnce);
+		this.basicMovement(keyLeft, keyRight, keyC, keyCOnce);
 	}
 
-	basicMovement(keyLeft, keyRight, keyUp, upOnce){
+	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
 		if (this.canMove){
 			if (keyLeft.isDown || this.inputPad.left){
 				this.setAccelerationX(-ACCELERATION);
@@ -308,7 +311,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// handle long jump press
-		if ((upOnce || this.inputPad.aOnce) && this.canJump 
+		if ((keyCOnce || this.inputPad.aOnce) && this.canJump 
 			&& (this.onGround || (getTimestamp() - this.startFallTime < COYOTE_TIME))){
 			this.jumpTimer = 1;
 			this.canJump = false;
@@ -320,7 +323,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			setTimeout(() => {
 				this.canJump = true;
 			}, 100);
-		} else if ((keyUp.isDown || this.inputPad.a) && this.jumpTimer != 0 && !this.isDashing){
+		} else if ((keyC.isDown || this.inputPad.a) && this.jumpTimer != 0 && !this.isDashing){
 			if (this.jumpTimer > 12) {
 				this.jumpTimer = 0;
 			} else {
@@ -341,13 +344,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.blockedRight && this.anims.play("dark_wall");
 				this.blockedRight && !this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
 				// handle walljumps
-				if (upOnce || this.inputPad.aOnce){
+				if (keyCOnce || this.inputPad.aOnce){
 					this.wallJump(LEFT);
 				}
 			} else if (this.blockedLeft || this.collideLeft){
 				this.blockedLeft && !this.isDashing && this.setVelocityY(this.body.velocity.y / 1.5);
 				this.blockedLeft && this.anims.play("dark_wall");
-				if (upOnce || this.inputPad.aOnce){
+				if (keyCOnce || this.inputPad.aOnce){
 					this.wallJump(RIGHT);
 				}
 			}
