@@ -30,6 +30,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canLand = true;
 		this.isDashing = false;
 		this.isJumping = false;
+		this.isWallJumping = { left: false, right: false };
 		this.wasOnGround = false;
 		this.startFallTime = getTimestamp();
 		this.hyperDashing = false;
@@ -179,6 +180,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             // FIXME don't do this every frame
 			this.setMaxVelocity(XSPEED, YSPEED);
             this.isJumping = false;
+            this.isWallJumping.right = false;
+            this.isWallJumping.left = false;
 			this.hyperDashing = false;
             this.canDash = true;
 			this.wasOnGround = this.onGround;
@@ -283,7 +286,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
 		if (this.canMove){
-			if (keyLeft.isDown || this.inputPad.left){
+			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
 				this.setAccelerationX(-ACCELERATION);
 				this.setFlipX(0);
 
@@ -292,7 +295,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				} else {
 					this.onGround && this.anims.play("dark_run", true);
 				}
-			} else if (keyRight.isDown || this.inputPad.right){
+			} else if ((keyRight.isDown || this.inputPad.right) && !this.isWallJumping.left){
 				this.setAccelerationX(ACCELERATION);
 				this.setFlipX(1);
 
@@ -323,6 +326,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				}
 			}
 		}
+
+        if (!keyLeft.isDown && !this.inputPad.left)
+            this.isWallJumping.right = false;
+        if (!keyRight.isDown && !this.inputPad.right)
+            this.isWallJumping.left = false;
 
 		// handle long jump press
 		if ((keyCOnce || this.inputPad.aOnce) && this.canJump 
@@ -383,6 +391,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isJumping = true;
 		this.hyperDashing = false;
 
+		dir == LEFT ? this.isWallJumping.left = true : this.isWallJumping.right = true;
+
 		this.anims.play("dark_air");
 
 		this.setAccelerationX(dir * WALLJUMP_XSPEED);
@@ -400,6 +410,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		setTimeout(() => {
 			!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
 		}, 300);
+		setTimeout(() => {
+			this.isWallJumping.right = false;
+			this.isWallJumping.left = false;
+		}, WALLJUMP_TIME);
 	}
 	
 	dash(dx, dy){

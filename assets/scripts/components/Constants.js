@@ -2,6 +2,7 @@ const XSPEED = 110;
 const YSPEED = 150;
 const WALLJUMP_XSPEED = 160;
 const WALLJUMP_YSPEED = 120;
+const WALLJUMP_TIME = 380;
 const GRAVITY = 980;
 const ACCELERATION = 1200;
 const DASH_SPEED = 240;
