@@ -152,6 +152,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	update(){
 		if (!this.active){ return; }
+
+		const tileRight = this.scene.layer.getTileAtWorldXY(this.x + 6, this.y);
+		const tileLeft = this.scene.layer.getTileAtWorldXY(this.x - 6, this.y);
+
+		if (this.getRightCenter().x + WALL_DISTANCE < tileRight.right && tileRight.collides){
+			this.collideRight = true;
+		} else {
+			this.collideRight = false;
+		}
+		if (this.getLeftCenter().x - WALL_DISTANCE < tileLeft.right + 16 && tileLeft.collides){
+			this.collideLeft = true;
+		} else {
+			this.collideLeft = false;
+		}
 		
 		// handle inputs
 		this.handleGamepadAxis();
