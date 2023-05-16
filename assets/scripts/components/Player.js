@@ -153,7 +153,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update(){
-		if (!this.active){ return; }
+		if (!this.alive){ return; }
 
 		const tileRight = this.scene.layer.getTileAtWorldXY(this.x + 6, this.y);
 		const tileLeft = this.scene.layer.getTileAtWorldXY(this.x - 6, this.y);

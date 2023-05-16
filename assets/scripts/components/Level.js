@@ -46,15 +46,20 @@ export class Level extends Phaser.Scene {
 			player.alive = false;
 
 			player.setTint(0xff0000);
+			player.anims.stop();
+			player.anims.play("dark_death");
+			player.setTint(0xffffff);
 
 			this.cameras.main.shake(250, 0.002);
 
 			setTimeout(() => {
 				this.cameras.main.fadeOut(200, 0, 0, 0);
-			}, 400);
+				player.setAlpha(0);
+				player.destroy();
+			}, 800);
 			setTimeout(() => {
 				this.scene.start(this.key)
-			}, 600);
+			}, 1000);
 		}
 	}
 }
