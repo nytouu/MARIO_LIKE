@@ -7,14 +7,14 @@ export class Test extends Level {
 	}
 
 	preload(){
-		this.load.tilemapTiledJSON("test_map", "assets/tiled/test.json");
+		this.load.tilemapTiledJSON("test_map", "assets/tiled/test2.json");
 	}
 
 	create(){
 		this.add.shader('shader_thing', 100, 100, 800, 600);
 
 		const test_map = this.add.tilemap("test_map");
-		const tileset = test_map.addTilesetImage("placeholder", "placeholder");
+		const tileset = test_map.addTilesetImage("tilesex", "placeholder");
 		this.layer = test_map.createLayer("tiles", tileset);
 
 		this.player = new Player(this, 100, 100);
