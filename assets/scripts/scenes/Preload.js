@@ -7,6 +7,7 @@ export class Preload extends Level {
 
 	preload(){
 		this.load.image("placeholder", "assets/imgs/placeholder.png");
+		this.load.image("spike", "assets/imgs/spike.png");
 		this.load.image("player_dark_wall", "assets/imgs/player/dark_wall.png");
 		this.load.image("player_dark_dash", "assets/imgs/player/dark_dash.png");
 		this.load.spritesheet("player_bright_run", "assets/imgs/player/bright_run.png", 

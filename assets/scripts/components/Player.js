@@ -24,6 +24,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
 
+        this.alive = true;
 		this.canMove = true;
 		this.canJump = true;
 		this.canDash = true;
