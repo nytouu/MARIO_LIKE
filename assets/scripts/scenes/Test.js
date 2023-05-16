@@ -19,6 +19,7 @@ export class Test extends Level {
 		this.layer = test_map.createLayer("tiles", tileset);
 		
 		this.loadSpikes(test_map);
+		this.loadOrbs(test_map);
 
 		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
 
