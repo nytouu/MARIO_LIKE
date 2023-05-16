@@ -34,7 +34,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isWallJumping = { left: false, right: false };
 		this.wasOnGround = false;
 		this.startFallTime = getTimestamp();
-		this.hyperDashing = false;
+		this.isHyperDashing = false;
 		this.jumpTimer = 0;
 		this.dashTrailCounter = 0;
 		this.dashBoingCounter = 0;
@@ -175,7 +175,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		if (this.isDashing){
 			this.drawDashTrail();
-		} else if (this.hyperDashing){
+		} else if (this.isHyperDashing){
 			this.hyperDash();
 		} else if (this.onGround){
             // FIXME don't do this every frame
@@ -183,13 +183,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.isJumping = false;
             this.isWallJumping.right = false;
             this.isWallJumping.left = false;
-			this.hyperDashing = false;
+			this.isHyperDashing = false;
             this.canDash = true;
 			this.wasOnGround = this.onGround;
             this.setTint(0xffffff);
 		}
 
-		if ((this.scaleX != 1 || this.scaleY != 1) && !this.hyperDashing)
+		if ((this.scaleX != 1 || this.scaleY != 1) && !this.isHyperDashing)
 			this.resetSize();
 
 		if (!this.onGround){
@@ -214,17 +214,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// slow down after hyper dash
 		if (this.isDashing && this.isJumping){
 			setTimeout(() => { 
-				!this.isDashing && !this.hyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+				!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
 			}, 200);
 			setTimeout(() => { 
-				!this.isDashing && !this.hyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
-				this.hyperDashing = false;
+				!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+				this.isHyperDashing = false;
 			}, 400);
 			setTimeout(() => {
-				!this.isDashing && !this.hyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+				!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
 			}, 600);
 			this.interruptDash();
-			this.hyperDashing = true;
+			this.isHyperDashing = true;
 		}
 
 		this.removeTrail();
@@ -288,7 +288,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
 		if (this.canMove){
 			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
-				if (!this.hyperDashing){
+				if (!this.isHyperDashing){
 					this.setAccelerationX(-ACCELERATION);
 				} else {
 					this.setAccelerationX(-ACCELERATION / 3);
@@ -301,7 +301,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 					this.onGround && this.anims.play("dark_run", true);
 				}
 			} else if ((keyRight.isDown || this.inputPad.right) && !this.isWallJumping.left){
-				if (!this.hyperDashing){
+				if (!this.isHyperDashing){
 					this.setAccelerationX(ACCELERATION);
 				} else {
 					this.setAccelerationX(ACCELERATION / 3);
@@ -317,7 +317,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				if (this.onGround){
 					// set ground acceleration
 					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
-				} else if (this.hyperDashing){
+				} else if (this.isHyperDashing){
                     // set air acceleration if hyper dashing
                     this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 4);
 				} else {
@@ -401,7 +401,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.jumpTimer = 1;
 		this.canJump = false;
 		this.isJumping = true;
-		this.hyperDashing = false;
+		this.isHyperDashing = false;
 
 		dir == LEFT ? this.isWallJumping.left = true : this.isWallJumping.right = true;
 
