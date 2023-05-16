@@ -1,4 +1,5 @@
 import { getTimestamp } from "../components/Timer.js";
+import { Particle } from "../components/Particle.js";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y){
@@ -51,6 +52,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// groups for dash and "boing" effects
 		this.dashTrail = this.scene.add.group();
 		this.dashBoing = this.scene.add.group();
+        this.landParticles = this.scene.add.group();
 
 		// gamepad controls
 		this.inputPad = {
@@ -210,6 +212,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		} else if (this.canLand && this.body.velocity.y == 0){
 			this.anims.play("dark_land");
 			this.canLand = false;
+
+            new Particle(this.scene, this.x, this.y, "land_particles_anim")
 		}
 
 		// slow down after hyper dash
