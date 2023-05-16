@@ -31,6 +31,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canLand = true;
 		this.isDashing = false;
 		this.isJumping = false;
+		this.isNearOrb = false;
 		this.isWallJumping = { left: false, right: false };
 		this.wasOnGround = false;
 		this.startFallTime = getTimestamp();
@@ -345,8 +346,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.isWallJumping.left = false;
 
 		// handle long jump press
-		if ((keyCOnce || this.inputPad.aOnce) && this.canJump 
-			&& (this.onGround || (getTimestamp() - this.startFallTime < COYOTE_TIME))){
+		if ((keyCOnce || this.inputPad.aOnce) && this.canJump &&
+			(this.onGround || this.isNearOrb || (getTimestamp() - this.startFallTime < COYOTE_TIME))){
 			this.jumpTimer = 1;
 			this.canJump = false;
 			this.isJumping = true;

@@ -84,4 +84,8 @@ export class Level extends Phaser.Scene {
 			}, 1000);
 		}
 	}
+
+	handleOrbs(player){
+		player.isNearOrb = true;
+	}
 }

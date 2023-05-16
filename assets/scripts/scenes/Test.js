@@ -25,10 +25,11 @@ export class Test extends Level {
 
 		this.layer.setCollisionByProperty({isSolid: true});
 
-		this.player = new Player(this, 300, 256);
+		this.player = new Player(this, 100, 256);
 
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
+		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, null, this, this.player);
 
 		this.player.setCollideWorldBounds(true);
 
@@ -37,10 +38,7 @@ export class Test extends Level {
 	}
 
     update(){
-		// console.log(this.player.x, this.player.y)
+		// reset orb value
+		this.player.isNearOrb = false;
     }
-
-	touchSpike(){
-		console.log("skljdfkjlsdfjkl")
-	}
 }
