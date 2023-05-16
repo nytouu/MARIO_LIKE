@@ -287,7 +287,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
 		if (this.canMove){
 			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
-				this.setAccelerationX(-ACCELERATION);
+				if (!this.hyperDashing){
+					this.setAccelerationX(-ACCELERATION);
+				} else {
+					this.setAccelerationX(-ACCELERATION / 3);
+				}
 				this.setFlipX(0);
 
 				if (this.anims.currentAnim.key == "dark_land"){
@@ -296,7 +300,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 					this.onGround && this.anims.play("dark_run", true);
 				}
 			} else if ((keyRight.isDown || this.inputPad.right) && !this.isWallJumping.left){
-				this.setAccelerationX(ACCELERATION);
+				if (!this.hyperDashing){
+					this.setAccelerationX(ACCELERATION);
+				} else {
+					this.setAccelerationX(ACCELERATION / 3);
+				}
 				this.setFlipX(1);
 
 				if (this.anims.currentAnim.key == "dark_land"){
@@ -308,10 +316,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				if (this.onGround){
 					// set ground acceleration
 					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
+				} else if (this.hyperDashing){
+                    // set air acceleration if hyper dashing
+                    this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 4);
 				} else {
-					// set air acceleration
-					this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
-				}
+                    // set air acceleration
+                    this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
+                }
 
 				// reset velocity and acceleration when slow enough
 				if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
