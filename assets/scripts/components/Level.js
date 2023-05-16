@@ -45,7 +45,6 @@ export class Level extends Phaser.Scene {
 		if (player.alive){
 			player.alive = false;
 
-			player.setTint(0xff0000);
 			player.anims.stop();
 			player.anims.play("dark_death");
 			player.setTint(0xffffff);
