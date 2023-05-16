@@ -4,11 +4,9 @@ export class Particle extends Phaser.Physics.Arcade.Sprite {
 
 		this.texture = key;
 		this.setTexture(this.texture)
-
 		this.anims.play(key);
 
 		scene.add.existing(this);
-		scene.physics.add.existing(this);
 
 		setTimeout(() => {
 			this.destroy();
