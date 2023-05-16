@@ -19,7 +19,7 @@
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+            2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -39,15 +39,15 @@
          "name":"spikes",
          "objects":[
                 {
-                 "gid":4,
+                 "gid":8,
                  "height":16,
-                 "id":11,
+                 "id":17,
                  "name":"",
                  "properties":[
                         {
-                         "name":"isSpike",
-                         "type":"bool",
-                         "value":true
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
                         }],
                  "rotation":0,
                  "type":"",
@@ -57,15 +57,15 @@
                  "y":304
                 }, 
                 {
-                 "gid":4,
+                 "gid":8,
                  "height":16,
-                 "id":12,
+                 "id":18,
                  "name":"",
                  "properties":[
                         {
-                         "name":"isSpike",
-                         "type":"bool",
-                         "value":true
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
                         }],
                  "rotation":0,
                  "type":"",
@@ -75,15 +75,15 @@
                  "y":304
                 }, 
                 {
-                 "gid":4,
+                 "gid":8,
                  "height":16,
-                 "id":13,
+                 "id":19,
                  "name":"",
                  "properties":[
                         {
-                         "name":"isSpike",
-                         "type":"bool",
-                         "value":true
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
                         }],
                  "rotation":0,
                  "type":"",
@@ -93,15 +93,15 @@
                  "y":304
                 }, 
                 {
-                 "gid":4,
+                 "gid":8,
                  "height":16,
-                 "id":14,
+                 "id":20,
                  "name":"",
                  "properties":[
                         {
-                         "name":"isSpike",
-                         "type":"bool",
-                         "value":true
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
                         }],
                  "rotation":0,
                  "type":"",
@@ -109,6 +109,78 @@
                  "width":16,
                  "x":208,
                  "y":304
+                }, 
+                {
+                 "gid":12,
+                 "height":16,
+                 "id":21,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":320,
+                 "y":256
+                }, 
+                {
+                 "gid":12,
+                 "height":16,
+                 "id":22,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"left"
+                        }],
+                 "rotation":-90,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":320,
+                 "y":272
+                }, 
+                {
+                 "gid":12,
+                 "height":16,
+                 "id":23,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"right"
+                        }],
+                 "rotation":90,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":336,
+                 "y":256
+                }, 
+                {
+                 "gid":1073741836,
+                 "height":16,
+                 "id":24,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":320,
+                 "y":288
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -132,6 +204,18 @@
                  "width":16,
                  "x":192,
                  "y":256
+                }, 
+                {
+                 "gid":19,
+                 "height":16,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":400,
+                 "y":272
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -140,7 +224,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":17,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -172,6 +256,98 @@
                  "properties":[
                         {
                          "name":"isSpike",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
+         "tilewidth":16
+        }, 
+        {
+         "columns":2,
+         "firstgid":5,
+         "image":"..\/imgs\/placeholder.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"placeholder",
+         "spacing":0,
+         "tilecount":4,
+         "tileheight":16,
+         "tiles":[
+                {
+                 "id":1,
+                 "properties":[
+                        {
+                         "name":"isSolid",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
+         "tilewidth":16
+        }, 
+        {
+         "columns":2,
+         "firstgid":9,
+         "image":"..\/imgs\/placeholder.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"placeholder",
+         "spacing":0,
+         "tilecount":4,
+         "tileheight":16,
+         "tiles":[
+                {
+                 "id":1,
+                 "properties":[
+                        {
+                         "name":"isSolid",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
+         "tilewidth":16
+        }, 
+        {
+         "columns":2,
+         "firstgid":13,
+         "image":"..\/imgs\/placeholder.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"placeholder",
+         "spacing":0,
+         "tilecount":4,
+         "tileheight":16,
+         "tiles":[
+                {
+                 "id":1,
+                 "properties":[
+                        {
+                         "name":"isSolid",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
+         "tilewidth":16
+        }, 
+        {
+         "columns":2,
+         "firstgid":17,
+         "image":"..\/imgs\/placeholder.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"placeholder",
+         "spacing":0,
+         "tilecount":4,
+         "tileheight":16,
+         "tiles":[
+                {
+                 "id":1,
+                 "properties":[
+                        {
+                         "name":"isSolid",
                          "type":"bool",
                          "value":true
                         }]

@@ -32,7 +32,9 @@ export class Level extends Phaser.Scene {
 
 	loadSpikes(map){
 		const spikes = map.getObjectLayer("spikes");
-		spikes.objects.forEach(spike => { this.spikes.add(new Spike(this, spike.x + 8, spike.y - 8)); })
+		spikes.objects.forEach(spike => {
+			this.spikes.add(new Spike(this, spike.x, spike.y, spike.properties[0].value));
+		})
 
 		this.spikes.children.each(spike => {
 			spike.setImmovable(true);
