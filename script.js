@@ -25,7 +25,7 @@ var config =
         gamepad: true
     },
 	fps: {
-		target: 60,
+		target: FRAMERATE,
 		forceSetTimeOut: true
 	},
 };
