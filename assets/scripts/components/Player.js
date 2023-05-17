@@ -66,6 +66,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			xOnce: false,
 		};
 
+		this.scene.input.gamepad.on('down', this.gamepadEventConnect, this);
 		this.scene.input.gamepad.on('connected', this.gamepadEventConnect, this);
         this.scene.input.gamepad.on('disconnected', this.gamepadEventDisconnect, this);
 	}
