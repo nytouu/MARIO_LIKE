@@ -1,11 +1,28 @@
 {
-  "name": "mario_like",
+  "name": "dreampills",
   "version": "1.0.0",
-  "description": "",
+  "description": "game",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make": "electron-forge make"
   },
   "author": "nytouu",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nytouu/MARIO_LIKE.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nytouu/MARIO_LIKE/issues"
+  },
+  "homepage": "https://github.com/nytouu/MARIO_LIKE#readme",
+  "devDependencies": {
+    "electron": "^24.3.0",
+    "electron-packager": "^17.1.1"
+  }
 }
