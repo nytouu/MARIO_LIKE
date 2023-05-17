@@ -90,7 +90,13 @@ export class Level extends Phaser.Scene {
 	}
 
 	boingOrb(player, orb){
-		if (player.isJumping && player.jumpTimer == 1)
+		if (player.isJumping && player.jumpTimer == 1){
 			orb.anims.play("orb_boing_anim",true);
+
+			player.interruptDash();
+
+			player.canDash = true;
+			player.setTint(0xffffff);
+		}
 	}
 }
