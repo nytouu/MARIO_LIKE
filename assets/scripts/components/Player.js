@@ -367,7 +367,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.canJump = true;
 			}, 100);
 		} else if ((keyC.isDown || this.inputPad.a) && this.jumpTimer != 0 && !this.isDashing){
-			if (this.jumpTimer > 12) {
+			if (this.jumpTimer > FRAMERATE / 5) {
 				this.jumpTimer = 0;
 			} else {
 				// jump higher if holding jump
@@ -526,14 +526,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	removeTrail(){
 		this.dashTrail.children.each(function (silhouette) {
-			silhouette.alpha -= 0.05;
+			silhouette.alpha -= ALPHA_DECREMENT;
 			silhouette.alpha <= 0 && silhouette.destroy();
 		})
 	}
 
 	removeBoing(){
 		this.dashBoing.children.each(function (boing) {
-			boing.alpha -= 0.05;
+			boing.alpha -= ALPHA_DECREMENT;
 			boing.alpha <= 0 && boing.destroy();
 		})
 	}
