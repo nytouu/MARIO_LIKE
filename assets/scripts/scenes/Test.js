@@ -29,7 +29,7 @@ export class Test extends Level {
 
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
-		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, null, this, this.player);
+		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, this.boingOrb, this, this.player);
 
 		this.player.setCollideWorldBounds(true);
 

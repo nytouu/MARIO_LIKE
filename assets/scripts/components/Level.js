@@ -88,4 +88,9 @@ export class Level extends Phaser.Scene {
 	handleOrbs(player){
 		player.isNearOrb = true;
 	}
+
+	boingOrb(player, orb){
+		if (player.isJumping && player.jumpTimer == 1)
+			orb.anims.play("orb_boing_anim",true);
+	}
 }

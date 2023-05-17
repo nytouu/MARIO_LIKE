@@ -9,7 +9,10 @@ export class Preload extends Level {
 		this.load.image("placeholder", "assets/imgs/placeholder.png");
 
 		this.load.image("spike", "assets/imgs/spike.png");
+
 		this.load.image("orb", "assets/imgs/orb.png");
+		this.load.spritesheet("orb_boing", "assets/imgs/orb_boing.png", 
+			{frameWidth: 16, frameHeight: 16});
 
 		this.load.image("player_dark_wall", "assets/imgs/player/dark_wall.png");
 		this.load.image("player_dark_dash", "assets/imgs/player/dark_dash.png");
@@ -124,6 +127,14 @@ export class Preload extends Level {
 			frameRate : 10,
 			repeat : -1
 		});
+		this.anims.create({
+			key : 'orb_boing_anim',
+			frames : this.anims.generateFrameNumbers('orb_boing',
+				{start : 0, end : 7}),
+			frameRate : 15,
+			repeat : 0
+		});
+
 		this.anims.create({
 			key : 'land_particles_anim',
 			frames : this.anims.generateFrameNumbers('land_particles',
