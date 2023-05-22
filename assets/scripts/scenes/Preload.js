@@ -34,7 +34,9 @@ export class Preload extends Level {
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_land", "assets/imgs/player/dark_land.png", 
 			{frameWidth: 32, frameHeight: 32});
-		this.load.spritesheet("player_dark_death", "assets/imgs/player/death.png", 
+		this.load.spritesheet("player_dark_climb", "assets/imgs/player/dark_climb.png", 
+			{frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet("player_death", "assets/imgs/player/death.png", 
 			{frameWidth: 32, frameHeight: 32});
 
 		this.load.spritesheet("orb_particles", "assets/imgs/orb_particles.png",
@@ -89,6 +91,13 @@ export class Preload extends Level {
 			repeat : -1
 		});
 		this.anims.create({
+			key : 'dark_climb',
+			frames : this.anims.generateFrameNumbers('player_dark_climb',
+				{start : 0, end : 7}),
+			frameRate : 10,
+			repeat : -1
+		});
+		this.anims.create({
 			key : 'dark_land',
 			frames : this.anims.generateFrameNumbers('player_dark_land',
 				{start : 0, end : 5}),
@@ -97,7 +106,7 @@ export class Preload extends Level {
 		});
 		this.anims.create({
 			key : 'dark_death',
-			frames : this.anims.generateFrameNumbers('player_dark_death',
+			frames : this.anims.generateFrameNumbers('player_death',
 				{start : 0, end : 7}),
 			frameRate : 10,
 			repeat : 0

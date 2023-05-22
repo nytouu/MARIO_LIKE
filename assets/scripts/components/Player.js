@@ -31,7 +31,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canDash = true;
 		this.canLand = true;
 		this.canClimbLadder = false;
-		this.isClimbingLadder = false;
+		this.wasClimbingLadder = false;
 		this.isDashing = false;
 		this.isJumping = false;
 		this.isNearOrb = false;
@@ -216,7 +216,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.wasOnGround = false;
 			}
 
-		} else if (this.canLand && this.body.velocity.y == 0){
+		} else if (this.canLand && this.body.velocity.y == 0 && !this.wasClimbingLadder){
 			this.anims.play("dark_land");
 			this.canLand = false;
 
@@ -297,12 +297,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.canClimbLadder){
 			this.climbLadder(keyLeft, keyRight, keyUp, keyDown);
 		} else {
-			if (this.body.gravity.y == 0) this.setGravityY(GRAVITY);
-			this.basicMovement(keyLeft, keyRight, keyC, keyCOnce, keyUp)
+			this.basicMovement(keyLeft, keyRight, keyC, keyCOnce)
+
+			if (this.wasClimbingLadder){
+				this.wasClimbingLadder = false;
+				this.body.gravity.y == 0 && this.setGravityY(GRAVITY);
+				!this.onGround && this.anims.play("dark_air", true);
+			}
 		}
 	}
 
-	basicMovement(keyLeft, keyRight, keyC, keyCOnce, keyUp){
+	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
 		if (this.canMove){
 			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
 				if (!this.isHyperDashing){
@@ -412,18 +417,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.onGround){
 			if (keyLeft.isDown || this.inputPad.left){
 				this.setVelocityX(-XSPEED);
+				this.anims.play("dark_run", true);
+				this.setFlipX(0);
 			} else if (keyRight.isDown || this.inputPad.right){
 				this.setVelocityX(XSPEED);
-			} else {
-				// this.setVelocityX(0);
+				this.anims.play("dark_run", true);
+				this.setFlipX(1);
 			}
 
 			if (keyUp.isDown || this.inputPad.up){
 				this.setVelocityY(-CLIMB_SPEED);
+				this.anims.play("dark_climb", true);
 			} else if (keyDown.isDown || this.inputPad.down){
 				this.setVelocityY(CLIMB_SPEED);
-			} else {
-				// this.setVelocityY(0);
+				this.anims.play("dark_climb", true);
 			}
 
 			// set ground acceleration
@@ -449,6 +456,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		if (!this.onGround){
+			this.wasClimbingLadder = true;
 			if (keyLeft.isDown || this.inputPad.left){
 				this.setVelocityX(-CLIMB_SPEED);
 			} else if (keyRight.isDown || this.inputPad.right){
@@ -459,11 +467,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			if (keyUp.isDown || this.inputPad.up){
 				this.setVelocityY(-CLIMB_SPEED);
+				this.anims.play("dark_climb", true);
 			} else if (keyDown.isDown || this.inputPad.down){
 				this.setVelocityY(CLIMB_SPEED);
+				this.anims.play("dark_climb", true);
 			} else {
 				this.setVelocityY(0);
 				this.setGravityY(0);
+				this.anims.pause();
 			}
 		}
 	}
