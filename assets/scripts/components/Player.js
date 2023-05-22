@@ -26,6 +26,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
 
         this.alive = true;
+		this.interract = false,
 		this.canMove = true;
 		this.canJump = true;
 		this.canDash = true;
@@ -261,6 +262,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         const keyXOnce = Phaser.Input.Keyboard.JustDown(
 			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+		);
+
+        this.interract = Phaser.Input.Keyboard.JustDown(
+			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V)
 		);
 
 		// set player properties

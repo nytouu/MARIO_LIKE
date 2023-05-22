@@ -19,7 +19,7 @@ var config =
             debug: false
         }
     },
-    scene: [ Preload, House01 ],
+    scene: [ Preload, House01, Test ],
     pixelArt: true,
     input:
     {

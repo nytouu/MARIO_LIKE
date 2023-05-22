@@ -25,11 +25,14 @@ export class House01 extends Level {
 
 		this.layer.setCollisionByProperty({isSolid: true});
 
+		this.loadBed(map);
+
 		this.player = new Player(this, 176, 135);
 		this.ladder = new Ladder(this, 48, 32);
 
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
+		this.physics.add.overlap(this.player, this.bed, this.bed.highlightBed, null, this.bed);
 
 		this.cameras.main.startFollow(this.player, false, LERP, LERP);
 		this.cameras.main.setZoom(2);
@@ -38,10 +41,16 @@ export class House01 extends Level {
 	update(){
 		this.player.canDash = false;
 
-		// console.log(this.player.x, this.player.y)
-
-		// console.log(this.player.isClimbingLadder, this.player.canClimbLadder)
 		this.player.canClimbLadder = false;
 		this.player.isClimbingLadder = false;
+
+		if (this.physics.overlap(this.player, this.bed)){
+			if (this.player.interract)
+				this.loadScene("Test", 500);
+		} else {
+			if (this.bed.tintFill){
+				this.bed.highlightBed();
+			}
+		}
 	}
 }

@@ -1,5 +1,6 @@
 import { Spike } from "../components/Spike.js"
 import { Orb } from "../components/Orb.js"
+import { Bed } from "../components/Bed.js"
 
 export class Level extends Phaser.Scene {
 	init() {
@@ -10,6 +11,7 @@ export class Level extends Phaser.Scene {
 
 		this.spikes = this.physics.add.group();
 		this.orbs = this.physics.add.group();
+		this.bed = false;
 	}
 
 	preload() {}
@@ -52,6 +54,20 @@ export class Level extends Phaser.Scene {
 		this.orbs.children.each(orb => {
 			orb.setImmovable(true);
 		})
+	}
+
+	loadBed(map){
+		const bed = map.getObjectLayer("bed");
+		bed.objects.forEach(bed => {
+			this.bed = new Bed(this, bed.x + 16, bed.y - 8);
+		})
+	}
+
+	loadScene(key, time){
+		this.cameras.main.fadeOut(time, 0, 0, 0);
+		setTimeout(() => {
+			this.scene.start(key);
+		}, time)
 	}
 
 	killPlayer(player){

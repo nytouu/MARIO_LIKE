@@ -10,6 +10,8 @@ export class Preload extends Level {
 
 		this.load.image("spike", "assets/imgs/spike.png");
 
+		this.load.image("bed", "assets/imgs/bed.png");
+
 		this.load.image("ladder", "assets/imgs/ladder.png");
 
 		this.load.image("orb", "assets/imgs/orb.png");
