@@ -5,6 +5,7 @@ const YSPEED = 150;
 const WALLJUMP_XSPEED = 180;
 const WALLJUMP_YSPEED = 110;
 const WALLJUMP_TIME = 380;
+const CLIMB_SPEED = 60;
 const GRAVITY = 980;
 const ACCELERATION = 1200;
 const DASH_SPEED = 220;

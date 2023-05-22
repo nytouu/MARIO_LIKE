@@ -89,6 +89,10 @@ export class Level extends Phaser.Scene {
 		player.isNearOrb = true;
 	}
 
+	handleLadders(player){
+		player.canClimbLadder = true;
+	}
+
 	boingOrb(player, orb){
 		if (player.isJumping && player.jumpTimer == 1){
 			orb.anims.play("orb_boing_anim",true);

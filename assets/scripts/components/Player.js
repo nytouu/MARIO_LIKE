@@ -30,6 +30,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canJump = true;
 		this.canDash = true;
 		this.canLand = true;
+		this.canClimbLadder = false;
+		this.isClimbingLadder = false;
 		this.isDashing = false;
 		this.isJumping = false;
 		this.isNearOrb = false;
@@ -292,10 +294,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.dash(dx, dy);
 		}
 
-		this.basicMovement(keyLeft, keyRight, keyC, keyCOnce);
+		if (this.canClimbLadder){
+			this.climbLadder(keyLeft, keyRight, keyUp, keyDown);
+		} else {
+			if (this.body.gravity.y == 0) this.setGravityY(GRAVITY);
+			this.basicMovement(keyLeft, keyRight, keyC, keyCOnce, keyUp)
+		}
 	}
 
-	basicMovement(keyLeft, keyRight, keyC, keyCOnce){
+	basicMovement(keyLeft, keyRight, keyC, keyCOnce, keyUp){
 		if (this.canMove){
 			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
 				if (!this.isHyperDashing){
@@ -397,6 +404,66 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				if (keyCOnce || this.inputPad.aOnce){
 					this.wallJump(RIGHT);
 				}
+			}
+		}
+	}
+
+	climbLadder(keyLeft, keyRight, keyUp, keyDown){
+		if (this.onGround){
+			if (keyLeft.isDown || this.inputPad.left){
+				this.setVelocityX(-XSPEED);
+			} else if (keyRight.isDown || this.inputPad.right){
+				this.setVelocityX(XSPEED);
+			} else {
+				// this.setVelocityX(0);
+			}
+
+			if (keyUp.isDown || this.inputPad.up){
+				this.setVelocityY(-CLIMB_SPEED);
+			} else if (keyDown.isDown || this.inputPad.down){
+				this.setVelocityY(CLIMB_SPEED);
+			} else {
+				// this.setVelocityY(0);
+			}
+
+			// set ground acceleration
+			this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION * 1.5);
+		} else if (this.isHyperDashing){
+			// set air acceleration if hyper dashing
+			this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 4);
+		} else {
+			// set air acceleration
+			this.setAccelerationX(((this.body.velocity.x > 0) ? -1 : 1) * ACCELERATION / 1.5);
+		}
+
+		// reset velocity and acceleration when slow enough
+		if (Math.abs(this.body.velocity.x) < 20 && Math.abs(this.body.velocity.x) > -20) {
+			this.setVelocityX(0);
+			this.setAccelerationX(0);
+
+			if (this.anims.currentAnim.key == "dark_land"){
+				this.onGround && this.anims.chain("dark_idle");
+			} else {
+				this.onGround && this.anims.play("dark_idle", true);
+			}
+		}
+
+		if (!this.onGround){
+			if (keyLeft.isDown || this.inputPad.left){
+				this.setVelocityX(-CLIMB_SPEED);
+			} else if (keyRight.isDown || this.inputPad.right){
+				this.setVelocityX(CLIMB_SPEED);
+			} else {
+				this.setVelocityX(0);
+			}
+
+			if (keyUp.isDown || this.inputPad.up){
+				this.setVelocityY(-CLIMB_SPEED);
+			} else if (keyDown.isDown || this.inputPad.down){
+				this.setVelocityY(CLIMB_SPEED);
+			} else {
+				this.setVelocityY(0);
+				this.setGravityY(0);
 			}
 		}
 	}

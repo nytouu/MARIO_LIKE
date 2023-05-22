@@ -10,6 +10,8 @@ export class Preload extends Level {
 
 		this.load.image("spike", "assets/imgs/spike.png");
 
+		this.load.image("ladder", "assets/imgs/ladder.png");
+
 		this.load.image("orb", "assets/imgs/orb.png");
 		this.load.spritesheet("orb_boing", "assets/imgs/orb_boing.png", 
 			{frameWidth: 16, frameHeight: 16});
@@ -143,6 +145,6 @@ export class Preload extends Level {
 			repeat : 0
 		});
 
-		this.scene.start("Test");
+		this.scene.start("House01");
 	}
 }
