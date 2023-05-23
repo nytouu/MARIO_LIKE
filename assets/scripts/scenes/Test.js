@@ -7,7 +7,7 @@ export class Test extends Level {
 	}
 
 	preload(){
-		this.load.tilemapTiledJSON("test_map", "assets/tiled/test2.json");
+		this.load.tilemapTiledJSON("test_map", "assets/tiled/level1.json");
 	}
 
 	create(){
@@ -25,7 +25,7 @@ export class Test extends Level {
 
 		this.layer.setCollisionByProperty({isSolid: true});
 
-		this.player = new Player(this, 100, 256);
+		this.player = new Player(this, 16, 152);
 
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
@@ -35,9 +35,12 @@ export class Test extends Level {
 
 		this.cameras.main.startFollow(this.player, false, LERP, LERP);
 		this.cameras.main.setZoom(2);
+		this.cameras.main.setBounds(0, -4, this.layer.width, this.layer.height, true);
 	}
 
     update(){
+		// console.log(this.player.x, this.player.y)
+
 		// reset orb value
 		this.player.isNearOrb = false;
     }

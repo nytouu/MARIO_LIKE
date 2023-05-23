@@ -67,6 +67,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			aOnce: false,
 			x: false,
 			xOnce: false,
+			b: false,
+			bOnce: false,
 		};
 
 		this.scene.input.gamepad.on('down', this.gamepadEventConnect, this);
@@ -75,16 +77,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	gamepadEventConnect() {
-		console.log("Controller connected!");
-        this.gamepad = this.scene.input.gamepad.pad1;
-		
-		// setup events
-		this.gamepad.on("down", () => {
-			this.handleGamepadButtons("down");
-		});
-		this.gamepad.on("up", () => {
-			this.handleGamepadButtons("up");
-		});
+		if (this.scene == undefined){
+			this.gamepad = false;
+			this.resetGamepad();
+			return;
+		} else {
+			console.log("Controller connected!");
+			this.gamepad = this.scene.input.gamepad.pad1;
+
+			// setup events
+			this.gamepad.on("down", () => {
+				this.handleGamepadButtons("down");
+			});
+			this.gamepad.on("up", () => {
+				this.handleGamepadButtons("up");
+			});
+		}
+
 	}
 
     gamepadEventDisconnect(){
@@ -99,18 +108,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
 	handleGamepadButtons(event){
-		const buttonA = this.gamepad.buttons[BUTTON_A];
-		const buttonX = this.gamepad.buttons[BUTTON_X];
+		if (this.gamepad){
+			const buttonA = this.gamepad.buttons[BUTTON_A];
+			const buttonX = this.gamepad.buttons[BUTTON_X];
+			const buttonB = this.gamepad.buttons[BUTTON_B];
 
-		this.inputPad.x = buttonX.value;
-		this.inputPad.a = buttonA.value;
+			this.inputPad.x = buttonX.value;
+			this.inputPad.a = buttonA.value;
+			this.inputPad.b = buttonB.value;
 
-		// aOnce and xOnce are true during 1 frame even when holding a or x
-		if (event == "down") {
-			if (buttonA.value)
-				this.inputPad.aOnce = buttonA.value;
-			if (buttonX.value)
-				this.inputPad.xOnce = buttonX.value;
+			// aOnce and xOnce are true during 1 frame even when holding a or x
+			if (event == "down") {
+				if (buttonA.value)
+					this.inputPad.aOnce = buttonA.value;
+				if (buttonX.value)
+					this.inputPad.xOnce = buttonX.value;
+				if (buttonB.value)
+					this.inputPad.bOnce = buttonB.value;
+			}
 		}
 	}
 
@@ -149,8 +164,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			right: false,
 			a: false,
 			x: false,
+			b: false,
 			aOnce: false,
 			xOnce: false,
+			bOnce: false,
 		};
 	}
 
@@ -227,14 +244,33 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// slow down after hyper dash
 		if (this.isDashing && this.isJumping){
 			setTimeout(() => { 
-				!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+				}
 			}, 200);
 			setTimeout(() => { 
-				!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
-				this.isHyperDashing = false;
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+						this.isHyperDashing = false;
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+					this.isHyperDashing = false;
+				}
 			}, 400);
 			setTimeout(() => {
-				!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+				}
 			}, 600);
 			this.interruptDash();
 			this.isHyperDashing = true;
@@ -246,6 +282,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// reset these values
 		this.inputPad.aOnce = 0;
 		this.inputPad.xOnce = 0;
+		this.inputPad.bOnce = 0;
 	}
 
 	handleInput(){
@@ -267,6 +304,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.interract = Phaser.Input.Keyboard.JustDown(
 			this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V)
 		);
+		if (this.inputPad.bOnce) { this.interract = true };
 
 		// set player properties
 		this.onGround = this.body.blocked.down;
@@ -301,6 +339,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		if (this.canClimbLadder){
 			this.climbLadder(keyLeft, keyRight, keyUp, keyDown);
+			!this.onGround && this.anims.play("dark_climb", true);
 		} else {
 			this.basicMovement(keyLeft, keyRight, keyC, keyCOnce)
 
@@ -506,14 +545,33 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 		// slow down after wall jumping
 		setTimeout(() => { 
-			this.canJump = true;
-			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, (WALLJUMP_YSPEED * dashWallJump) / 1.2);
+			if (this.scene.isPaused){
+				setTimeout(() => { 
+					this.canJump = true;
+					!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, (WALLJUMP_YSPEED * dashWallJump) / 1.2);
+				}, TRANSITION_TIME)
+			} else {
+				this.canJump = true;
+				!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.2, (WALLJUMP_YSPEED * dashWallJump) / 1.2);
+			}
 		}, 100);
 		setTimeout(() => { 
-			!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED * dashWallJump);
+			if (this.scene.isPaused){
+				setTimeout(() => { 
+					!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED * dashWallJump);
+				}, TRANSITION_TIME)
+			} else {
+				!this.isDashing && this.setMaxVelocity(WALLJUMP_XSPEED / 1.5, YSPEED * dashWallJump);
+			}
 		}, 200);
 		setTimeout(() => {
-			!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED);
+			if (this.scene.isPaused){
+				setTimeout(() => { 
+					!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED * dashWallJump);
+				}, TRANSITION_TIME)
+			} else {
+				!this.isDashing && this.setMaxVelocity(XSPEED, YSPEED * dashWallJump);
+			}
 		}, 300);
 		setTimeout(() => {
 			this.isWallJumping.right = false;
@@ -549,19 +607,41 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.scene.cameras.main.shake(150, 0.002);
 
 			setTimeout(() => {
-				if (this.onGround){ 
-					this.canDash = true;
-					this.setTint(0xffffff);
-				}
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						if (this.onGround){ 
+							this.canDash = true;
+							this.setTint(0xffffff);
+						}
+					}, TRANSITION_TIME)
+				} else {
+					if (this.onGround){ 
+						this.canDash = true;
+						this.setTint(0xffffff);
+					}
+				} 
 			}, DASH_TIME - DASH_RESET_TIME),
 
 			setTimeout(() => {
-				this.interruptDash();
-				!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						this.interruptDash();
+						!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
+					}, TRANSITION_TIME)
+				} else {
+					this.interruptDash();
+					!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
+				}
 			}, DASH_TIME);
 
 			setTimeout(() => {
-				this.anims.stop();
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						this.anims.stop();
+					}, TRANSITION_TIME)
+				} else {
+					this.anims.stop();
+				}
 			}, DASH_TIME + 100);
 
 			this.setTint(0x00ffff);

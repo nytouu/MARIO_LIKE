@@ -2,6 +2,7 @@
 import { Preload as Preload } from "./assets/scripts/scenes/Preload.js";
 import { Test as Test } from "./assets/scripts/scenes/Test.js";
 import { House01 as House01 } from "./assets/scripts/scenes/House01.js";
+import { Dream01 as Dream01 } from "./assets/scripts/scenes/Dream01.js";
 
 var config =
 {
@@ -19,7 +20,7 @@ var config =
             debug: false
         }
     },
-    scene: [ Preload, House01, Test ],
+    scene: [ Preload, House01, Dream01 ],
     pixelArt: true,
     input:
     {

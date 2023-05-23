@@ -4,8 +4,8 @@ import { Bed } from "../components/Bed.js"
 
 export class Level extends Phaser.Scene {
 	init() {
-		this.shouldPause = false;
 		this.isPaused = false;
+		this.isGoingOut = false;
 
 		this.cameras.main.fadeIn(700, 0, 0, 0);
 
@@ -18,21 +18,7 @@ export class Level extends Phaser.Scene {
 
 	create() {}
 
-	update() {
-		if (this.shouldPause && !this.isPaused) {
-			this.pause();
-		}
-	}
-
-	pause() {
-		this.physics.pause();
-		this.isPaused = true;
-	}
-
-	unpause() {
-		this.physics.resume();
-		this.isPaused = false;
-	}
+	update() {}
 
 	loadSpikes(map){
 		const spikes = map.getObjectLayer("spikes");
@@ -46,8 +32,8 @@ export class Level extends Phaser.Scene {
 	}
 
 	loadOrbs(map){
-		const spikes = map.getObjectLayer("orbs");
-		spikes.objects.forEach(orb => {
+		const orbs = map.getObjectLayer("orbs");
+		orbs.objects.forEach(orb => {
 			this.orbs.add(new Orb(this, orb.x, orb.y));
 		})
 
@@ -64,10 +50,13 @@ export class Level extends Phaser.Scene {
 	}
 
 	loadScene(key, time){
-		this.cameras.main.fadeOut(time, 0, 0, 0);
-		setTimeout(() => {
-			this.scene.start(key);
-		}, time)
+		if (!this.isGoingOut){
+			this.cameras.main.fadeOut(time, 0, 0, 0);
+			setTimeout(() => {
+				this.scene.start(key);
+			}, time)
+		}
+		this.isGoingOut = true;
 	}
 
 	killPlayer(player){
@@ -79,7 +68,7 @@ export class Level extends Phaser.Scene {
 				player.interruptDash();
 			}
 
-			player.anims.stop();
+			// player.anims.stop();
 			player.anims.play("dark_death");
 			player.setTint(0xffffff);
 
@@ -118,5 +107,19 @@ export class Level extends Phaser.Scene {
 			player.canDash = true;
 			player.setTint(0xffffff);
 		}
+	}
+
+	transitionPause(){
+		this.physics.pause();
+		this.isPaused = true;
+		setTimeout(() => {
+			this.physics.resume();
+			this.isPaused = false;
+			
+			if (this.player){
+				this.player.canDash = true;
+				this.player.setTint(0xffffff);
+			}
+		}, TRANSITION_TIME * 1.2);
 	}
 }

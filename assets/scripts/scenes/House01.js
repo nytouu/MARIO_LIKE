@@ -36,6 +36,7 @@ export class House01 extends Level {
 
 		this.cameras.main.startFollow(this.player, false, LERP, LERP);
 		this.cameras.main.setZoom(2);
+		this.cameras.main.setBounds(-40, -8, this.layer.width, this.layer.height, true);
 	}
 
 	update(){
@@ -46,7 +47,7 @@ export class House01 extends Level {
 
 		if (this.physics.overlap(this.player, this.bed)){
 			if (this.player.interract)
-				this.loadScene("Test", 500);
+				this.loadScene("Dream01", 500);
 		} else {
 			if (this.bed.tintFill){
 				this.bed.highlightBed();
