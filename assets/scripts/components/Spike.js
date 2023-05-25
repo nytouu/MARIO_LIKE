@@ -20,29 +20,29 @@ export class Spike extends Phaser.Physics.Arcade.Sprite {
 			case "up":
 				this.x += OFFSET;
 				this.y -= OFFSET;
-				this.setSize(WIDTH, HEIGHT)
-				this.setOffset(0, WIDTH - HEIGHT)
+				this.setSize(WIDTH - 2, HEIGHT)
+				this.setOffset(1, WIDTH - HEIGHT)
 				break;
 			case "down":
 				this.setFlipY(true);
 				this.x += OFFSET;
 				this.y -= OFFSET;
-				this.setSize(WIDTH, HEIGHT)
-				this.setOffset(0, 0)
+				this.setSize(WIDTH - 2, HEIGHT)
+				this.setOffset(1, 0)
 				break;
 			case "left":
 				this.setRotation(-PI / HEIGHT);
 				this.x += OFFSET;
 				this.y -= OFFSET;
-				this.setSize(HEIGHT, WIDTH)
-				this.setOffset(WIDTH - HEIGHT, 0)
+				this.setSize(HEIGHT, WIDTH - 2)
+				this.setOffset(WIDTH - HEIGHT, 1)
 				break;
 			case "right":
 				this.setRotation(PI / HEIGHT);
 				this.x += OFFSET;
 				this.y -= OFFSET;
-				this.setSize(HEIGHT, WIDTH)
-				this.setOffset(0, 0)
+				this.setSize(HEIGHT, WIDTH - 2)
+				this.setOffset(0, 1)
 				break;
 		}
 	}

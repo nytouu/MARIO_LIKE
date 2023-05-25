@@ -71,7 +71,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			bOnce: false,
 		};
 
-		this.scene.input.gamepad.on('down', this.gamepadEventConnect, this);
 		this.scene.input.gamepad.on('connected', this.gamepadEventConnect, this);
         this.scene.input.gamepad.on('disconnected', this.gamepadEventDisconnect, this);
 	}
@@ -241,40 +240,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             new Particle(this.scene, this.x, this.y, "land_particles_anim")
 		}
 
-		// slow down after hyper dash
-		if (this.isDashing && this.isJumping){
-			setTimeout(() => { 
-				if (this.scene.isPaused){
-					setTimeout(() => { 
-						!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
-					}, TRANSITION_TIME)
-				} else {
-					!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
-				}
-			}, 200);
-			setTimeout(() => { 
-				if (this.scene.isPaused){
-					setTimeout(() => { 
-						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
-						this.isHyperDashing = false;
-					}, TRANSITION_TIME)
-				} else {
-					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
-					this.isHyperDashing = false;
-				}
-			}, 400);
-			setTimeout(() => {
-				if (this.scene.isPaused){
-					setTimeout(() => { 
-						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
-					}, TRANSITION_TIME)
-				} else {
-					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
-				}
-			}, 600);
-			this.interruptDash();
-			this.isHyperDashing = true;
-		}
+		this.slowAfterDash();
 
 		this.removeTrail();
 		this.removeBoing();
@@ -715,6 +681,42 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.increaseX();
 
 		this.drawDashBoing() ;
+	}
+
+	slowAfterDash(){
+		if (this.isDashing && this.isJumping){
+			setTimeout(() => { 
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing && this.setMaxVelocity(DASH_SPEED / 1.2, YSPEED);
+				}
+			}, 200);
+			setTimeout(() => { 
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+						this.isHyperDashing = false;
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(DASH_SPEED / 1.5, YSPEED);
+					this.isHyperDashing = false;
+				}
+			}, 400);
+			setTimeout(() => {
+				if (this.scene.isPaused){
+					setTimeout(() => { 
+						!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+					}, TRANSITION_TIME)
+				} else {
+					!this.isDashing && !this.isHyperDashing &&  this.setMaxVelocity(XSPEED, YSPEED);
+				}
+			}, 600);
+			this.interruptDash();
+			this.isHyperDashing = true;
+		}
 	}
 
 	shrinkX(){

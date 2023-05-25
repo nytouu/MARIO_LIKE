@@ -12,6 +12,11 @@ export class Level extends Phaser.Scene {
 		this.spikes = this.physics.add.group();
 		this.orbs = this.physics.add.group();
 		this.bed = false;
+
+		this.spawnCoords = { x: 0, y: 0 };
+		this.cameraCoords = { x: 0, y: 0 };
+		this.currentScreen = 0;
+
 	}
 
 	preload() {}
@@ -53,7 +58,9 @@ export class Level extends Phaser.Scene {
 		if (!this.isGoingOut){
 			this.cameras.main.fadeOut(time, 0, 0, 0);
 			setTimeout(() => {
-				this.scene.start(key);
+				this.scene.start(key, {
+					gamepad: this.player.gamepad,
+				});
 			}, time)
 		}
 		this.isGoingOut = true;
@@ -63,13 +70,7 @@ export class Level extends Phaser.Scene {
 		if (player.alive){
 			player.alive = false;
 
-			if (player.isDashing || player.isHyperDashing){
-				// in case max velocity is reset after a dash
-				player.interruptDash();
-			}
-
-			// player.anims.stop();
-			player.anims.play("dark_death");
+			player.anims.stop();
 			player.setTint(0xffffff);
 
 			this.cameras.main.shake(250, 0.002);
@@ -85,9 +86,24 @@ export class Level extends Phaser.Scene {
 				player.destroy();
 			}, 800);
 			setTimeout(() => {
-				this.scene.start(this.key)
+				this.scene.start(this.key, {
+					spawnCoords: this.spawnCoords, 
+					cameraCoords: this.cameraCoords, 
+					currentScreen: this.currentScreen,
+					gamepad: this.player.gamepad,
+				});
 			}, 1000);
 		}
+
+		if (player.isDashing || player.isHyperDashing){
+			// in case max velocity is reset after a dash
+			player.interruptDash();
+		}
+		player.anims.play("dark_death", true);
+
+		player.setGravity(0);
+		player.body.allowGravity = false;
+		player.setImmovable(true);
 	}
 
 	handleOrbs(player){
@@ -121,5 +137,20 @@ export class Level extends Phaser.Scene {
 				this.player.setTint(0xffffff);
 			}
 		}, TRANSITION_TIME * 1.2);
+	}
+
+	setupScreen(n, cx, cy, px, py){
+		this.currentScreen = n;
+		this.spawnCoords = {
+			x: px,
+			y: py 
+		};
+		this.cameraCoords = {
+			x: cx,
+			y: cy
+		};
+
+		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, TRANSITION_TIME, "Power2");
+		this.transitionPause();
 	}
 }
