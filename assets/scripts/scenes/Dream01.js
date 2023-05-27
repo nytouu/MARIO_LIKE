@@ -18,13 +18,17 @@ export class Dream01 extends Level {
 
 		if (data.cameraCoords){
 			this.cameraCoords = data.cameraCoords;
-			console.log(this.cameraCoords)
 		} else {
 			// default camera point
 			this.cameraCoords = { x: SCREEN_WIDTH * 1.5, y: SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3 };
 		}
-		this.currentScreen = data.currentScreen;
-		this.platformSpawned = false;
+
+		if (data.currentScreen){
+
+			this.currentScreen = data.currentScreen;
+		} else {
+			this.currentScreen = 0;
+		}
 
 		this.loadGamepad = false;
 		if (data.gamepad){
@@ -38,44 +42,46 @@ export class Dream01 extends Level {
 	}
 
 	create(){
-		// this.shader = this.add.shader('shader_thing', 0, 0, 1280, 720);
+		this.shader = this.add.shader('shader_thing', 0, 0, 1920, 1080);
 
 		const map = this.add.tilemap("dream01_map");
 		const tileset = map.addTilesetImage("dream01", "dream01_tileset");
 		this.layer = map.createLayer("tiles", tileset);
 
 		this.platforms = this.physics.add.staticGroup();
-		// this.platforms.create(this.spawnCoords.x, this.spawnCoords.y, "spike").setSize(16, 2);
 
 		this.loadSpikes(map);
 		this.loadOrbs(map);
 
-		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
-
-		this.layer.setCollisionByProperty({isSolid: true});
-		this.currentScreen = 0;
-
 		this.player = new Player(this, this.spawnCoords.x, this.spawnCoords.y);
 
+		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
+		this.player.setCollideWorldBounds(true);
+
 		if (this.loadGamepad) { this.player.gamepadEventConnect() };
+
+		this.layer.setCollisionByProperty({isSolid: true});
 
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.collider(this.player, this.platforms);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
 		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, this.boingOrb, this, this.player);
 
-		// this.player.setCollideWorldBounds(true);
 
 		this.cameras.main.setZoom(2);
 		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, 0)
 		console.log(this.cameraCoords)
+
+		if (this.currentScreen == 2){
+			this.platforms.create(this.spawnCoords.x, this.spawnCoords.y, "spike")
+				.setSize(48, 2)
+				.setOffset(24,16)
+				.setVisible(false);
+		}
 	}
 
     update(){
 		console.log(this.player.x, this.player.y, this.currentScreen)
-
-		// this.shader.x = this.player.x;
-		// this.shader.y = this.player.y;
 
 		// transition for first screen
 		if (this.currentScreen == 0){
@@ -87,7 +93,7 @@ export class Dream01 extends Level {
 					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3,
 					300, 416
 				);
-			} else if (this.player.x >= SCREEN_WIDTH * 2){
+			} else if (this.player.x >= SCREEN_WIDTH * 2 && this.player.y > SCREEN_HEIGHT * 2 + TILE_WIDTH * 3){
 				// first orb screen
 				this.setupScreen(
 					1, 
@@ -157,7 +163,42 @@ export class Dream01 extends Level {
 			}
 		}
 		else if (this.currentScreen == 2){
-
+			if (this.player.x <= SCREEN_WIDTH * 2){
+				this.setupScreen(
+					3, 
+					SCREEN_WIDTH * 1.5,
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
+					618, 248
+				);
+			}
+		}
+		else if (this.currentScreen == 3){
+			if (this.player.x > SCREEN_WIDTH * 2){
+				this.setupScreen(
+					2, 
+					SCREEN_WIDTH * 2.5,
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
+					666, 248
+				);
+			}
+			if (this.player.x < SCREEN_WIDTH){
+				this.setupScreen(
+					4, 
+					SCREEN_WIDTH * 0.5,
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
+					298, 200
+				);
+			}
+		}
+		else if (this.currentScreen == 3){
+			if (this.player.x > SCREEN_WIDTH){
+				this.setupScreen(
+					4, 
+					SCREEN_WIDTH * 1.5,
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
+					334, 200
+				);
+			}
 		}
 
 		// reset orb value
