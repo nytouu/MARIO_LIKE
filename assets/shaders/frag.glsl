@@ -8,12 +8,6 @@ uniform vec2 resolution;
 
 varying vec2 fragCoord;
 
-//get sphere
-float sphere(vec2 coord, vec2 pos, float r) {
-	vec2 d = pos - coord; 
-	return smoothstep(60.0, 0.0, dot(d, d) - r * r);
-}
-
 float round(vec2 x) { return float(int(x+sign(x)*0.5)); }
 
 //main
