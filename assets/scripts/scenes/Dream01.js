@@ -1,5 +1,6 @@
 import { Player } from "../components/Player.js"
 import { Level } from "../components/Level.js"
+import { Ladder } from "../components/Ladder.js"
 
 export class Dream01 extends Level {
 	constructor(){
@@ -13,14 +14,14 @@ export class Dream01 extends Level {
 			this.spawnCoords = data.spawnCoords;
 		} else {
 			// default spawn point
-			this.spawnCoords = { x: 336, y: 504 };
+			this.spawnCoords = { x: 336, y: 520 };
 		}
 
 		if (data.cameraCoords){
 			this.cameraCoords = data.cameraCoords;
 		} else {
 			// default camera point
-			this.cameraCoords = { x: SCREEN_WIDTH * 1.5, y: SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3 };
+			this.cameraCoords = { x: SCREEN_WIDTH * 1.5, y: SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 4 };
 		}
 
 		if (data.currentScreen){
@@ -54,6 +55,7 @@ export class Dream01 extends Level {
 		this.loadOrbs(map);
 
 		this.player = new Player(this, this.spawnCoords.x, this.spawnCoords.y);
+		this.ladder = new Ladder(this, 0, 128);
 
 		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
 		this.player.setCollideWorldBounds(true);
@@ -66,7 +68,7 @@ export class Dream01 extends Level {
 		this.physics.add.collider(this.player, this.platforms);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
 		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, this.boingOrb, this, this.player);
-
+		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
 
 		this.cameras.main.setZoom(2);
 		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, 0)
@@ -77,6 +79,9 @@ export class Dream01 extends Level {
 				.setSize(48, 2)
 				.setOffset(24,16)
 				.setVisible(false);
+		} else if (this.currentScreen == 5){
+			this.cameras.main.startFollow(this.player, false, LERP, LERP);
+			this.cameras.main.setBounds(0, 0, this.layer.width, SCREEN_HEIGHT, true);
 		}
 	}
 
@@ -90,16 +95,16 @@ export class Dream01 extends Level {
 				this.setupScreen(
 					-1, 
 					SCREEN_WIDTH / 2,
-					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3,
-					300, 416
+					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 4,
+					300, 432
 				);
-			} else if (this.player.x >= SCREEN_WIDTH * 2 && this.player.y > SCREEN_HEIGHT * 2 + TILE_WIDTH * 3){
+			} else if (this.player.x >= SCREEN_WIDTH * 2 && this.player.y > SCREEN_HEIGHT * 2 + TILE_WIDTH * 4){
 				// first orb screen
 				this.setupScreen(
 					1, 
 					SCREEN_WIDTH * 2.5,
-					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3,
-					668, 432
+					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 4,
+					668, 448
 				);
 			}
 		} 
@@ -107,16 +112,16 @@ export class Dream01 extends Level {
 		else if (this.currentScreen == -1){
 			if (this.player.x >= SCREEN_WIDTH){
 				let px, py;
-				if (this.player.y < 260){
-					px = 336, py = 416 ;
+				if (this.player.y < 276){
+					px = 336, py = 432 ;
 				} else {
-					px = 348, py = 512 ;
+					px = 348, py = 528 ;
 				}
 
 				this.setupScreen(
 					0, 
 					SCREEN_WIDTH * 1.5,
-					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3,
+					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 4,
 					px, py
 				);
 			}
@@ -128,16 +133,16 @@ export class Dream01 extends Level {
 				this.setupScreen(
 					0, 
 					SCREEN_WIDTH * 1.5,
-					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 3,
-					626, 432
+					SCREEN_HEIGHT * 2.5 + TILE_WIDTH * 4,
+					626, 448
 				);
-			} else if (this.player.y <= SCREEN_HEIGHT * 2 + TILE_WIDTH * 3){
+			} else if (this.player.y <= SCREEN_HEIGHT * 2 + TILE_WIDTH * 4){
 				// enter first up screen
 				this.setupScreen(
 					2, 
 					SCREEN_WIDTH * 2.5,
-					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
-					880, 328
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					880, 344
 				);
 				if (this.player.isDashing || this.player.isHyperDashing){
 					this.player.interruptDash();
@@ -150,7 +155,7 @@ export class Dream01 extends Level {
 				setTimeout(() => {
 					this.player.setGravityY(GRAVITY);
 
-					if (this.player.y > SCREEN_HEIGHT){
+					if (this.player.y > SCREEN_HEIGHT + TILE_WIDTH){
 						this.player.y = this.spawnCoords.y;
 					}
 
@@ -167,8 +172,8 @@ export class Dream01 extends Level {
 				this.setupScreen(
 					3, 
 					SCREEN_WIDTH * 1.5,
-					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
-					618, 248
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					618, 264
 				);
 			}
 		}
@@ -177,31 +182,61 @@ export class Dream01 extends Level {
 				this.setupScreen(
 					2, 
 					SCREEN_WIDTH * 2.5,
-					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
-					666, 248
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					666, 264
 				);
 			}
 			if (this.player.x < SCREEN_WIDTH){
 				this.setupScreen(
 					4, 
 					SCREEN_WIDTH * 0.5,
-					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
-					298, 200
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					298, 216
 				);
 			}
 		}
-		else if (this.currentScreen == 3){
+		else if (this.currentScreen == 4){
 			if (this.player.x > SCREEN_WIDTH){
 				this.setupScreen(
-					4, 
+					3, 
 					SCREEN_WIDTH * 1.5,
-					SCREEN_HEIGHT * 1.5 + TILE_WIDTH,
-					334, 200
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					334, 216
+				);
+			}
+			if (this.player.y < SCREEN_HEIGHT + TILE_WIDTH){
+				this.setupScreen(
+					5, 
+					SCREEN_WIDTH * 0.5,
+					SCREEN_HEIGHT * 0.5 + TILE_WIDTH,
+					40, 168
+				);
+				setTimeout(() => {
+					if (this.currentScreen == 5){
+						this.cameras.main.startFollow(this.player, false, LERP, LERP);
+						this.cameras.main.setBounds(0, 0, this.layer.width, SCREEN_HEIGHT, true);
+					}
+				}, TRANSITION_TIME);
+			}
+		}
+		else if (this.currentScreen == 5){
+			if (this.player.y > SCREEN_HEIGHT + TILE_WIDTH){
+				this.cameras.main.stopFollow();
+				this.cameras.main.removeBounds();
+				this.setupScreen(
+					4, 
+					SCREEN_WIDTH * 0.5,
+					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
+					36, 232
 				);
 			}
 		}
 
 		// reset orb value
 		this.player.isNearOrb = false;
+
+		// reset ladder values
+		this.player.canClimbLadder = false;
+		this.player.isClimbingLadder = false;
     }
 }

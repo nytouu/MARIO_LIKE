@@ -78,7 +78,9 @@ export class Level extends Phaser.Scene {
 			player.setMaxVelocity(0);
 			player.setVelocity(0);
 			player.setGravity(0);
+			player.body.allowGravity = false;
 			player.setImmovable(true);
+			player.body = null;
 
 			setTimeout(() => {
 				this.cameras.main.fadeOut(200, 0, 0, 0);
@@ -95,15 +97,7 @@ export class Level extends Phaser.Scene {
 			}, 1000);
 		}
 
-		if (player.isDashing || player.isHyperDashing){
-			// in case max velocity is reset after a dash
-			player.interruptDash();
-		}
 		player.anims.play("dark_death", true);
-
-		player.setGravity(0);
-		player.body.allowGravity = false;
-		player.setImmovable(true);
 	}
 
 	handleOrbs(player){
@@ -140,6 +134,7 @@ export class Level extends Phaser.Scene {
 	}
 
 	setupScreen(n, cx, cy, px, py){
+		console.log("setup screen ", n)
 		this.currentScreen = n;
 		this.spawnCoords = {
 			x: px,

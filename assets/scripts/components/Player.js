@@ -591,11 +591,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			setTimeout(() => {
 				if (this.scene.isPaused){
 					setTimeout(() => { 
-						this.interruptDash();
+						this.alive && this.interruptDash();
 						!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 					}, TRANSITION_TIME)
 				} else {
-					this.interruptDash();
+					this.alive && this.interruptDash();
 					!this.isJumping && this.setMaxVelocity(XSPEED, YSPEED);
 				}
 			}, DASH_TIME);
