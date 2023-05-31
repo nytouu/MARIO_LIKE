@@ -43,7 +43,7 @@ export class Dream01 extends Level {
 	}
 
 	create(){
-		this.shader = this.add.shader('shader_thing', 0, 0, 1920, 1080);
+		this.shader = this.add.shader('shader_thing', 0, 16, 1920, 1080);
 
 		const map = this.add.tilemap("dream01_map");
 		const tileset = map.addTilesetImage("dream01", "dream01_tileset");
