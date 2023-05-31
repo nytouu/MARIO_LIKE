@@ -8,7 +8,8 @@ export class Orb extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 
-		this.setCircle(8);
+		this.setCircle(10);
+		this.setOffset(-2, -2);
 
 		this.particles = this.scene.add.sprite(this.x, this.y, "orb_particles");
 		this.particles.anims.play("orb_anim");

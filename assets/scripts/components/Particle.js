@@ -10,6 +10,6 @@ export class Particle extends Phaser.Physics.Arcade.Sprite {
 
 		setTimeout(() => {
 			this.destroy();
-		}, 500);
+		}, 1000);
 	}
 }
