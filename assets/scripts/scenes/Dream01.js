@@ -53,6 +53,7 @@ export class Dream01 extends Level {
 
 		this.loadSpikes(map);
 		this.loadOrbs(map);
+		this.loadPills(map);
 
 		this.player = new Player(this, this.spawnCoords.x, this.spawnCoords.y);
 		this.ladder = new Ladder(this, 0, 128);
@@ -69,6 +70,7 @@ export class Dream01 extends Level {
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
 		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, this.boingOrb, this, this.player);
 		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
+		this.physics.add.overlap(this.player, this.pills, this.handlePills, null, this.player);
 
 		this.cameras.main.setZoom(2);
 		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, 0)

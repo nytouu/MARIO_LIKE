@@ -1,6 +1,8 @@
 import { Spike } from "../components/Spike.js"
 import { Orb } from "../components/Orb.js"
 import { Bed } from "../components/Bed.js"
+import { Pill } from "../components/Pill.js"
+import { Particle } from "../components/Particle.js";
 
 export class Level extends Phaser.Scene {
 	init() {
@@ -11,6 +13,7 @@ export class Level extends Phaser.Scene {
 
 		this.spikes = this.physics.add.group();
 		this.orbs = this.physics.add.group();
+		this.pills = this.physics.add.group();
 		this.bed = false;
 
 		this.spawnCoords = { x: 0, y: 0 };
@@ -45,6 +48,18 @@ export class Level extends Phaser.Scene {
 		this.orbs.children.each(orb => {
 			orb.setImmovable(true);
 		})
+	}
+
+	loadPills(map){
+		const pills = map.getObjectLayer("pills");
+		pills.objects.forEach(pill => {
+			this.pills.add(new Pill(this, pill.x, pill.y));
+		})
+
+		this.pills.children.each(pill => {
+			pill.setImmovable(true);
+		})
+		console.log(this.pills)
 	}
 
 	loadBed(map){
@@ -106,6 +121,13 @@ export class Level extends Phaser.Scene {
 
 	handleLadders(player){
 		player.canClimbLadder = true;
+	}
+
+	handlePills(player, pill){
+		if (pill){
+			new Particle(this.scene, pill.x, pill.y, "pill_particle_anim");
+			pill.destroy();
+		}
 	}
 
 	boingOrb(player, orb){
