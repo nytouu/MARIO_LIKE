@@ -56,6 +56,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.dashTrail = this.scene.add.group();
 		this.dashBoing = this.scene.add.group();
         this.landParticles = this.scene.add.group();
+		this.particleCounter = 0;
 
 		// gamepad controls
 		this.inputPad = {
@@ -178,21 +179,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	update(){
 		if (!this.alive){ return; }
 
-		if (this.scene.layer.getTileAtWorldXY(this.x + 6, this.y) != null && 
-			this.scene.layer.getTileAtWorldXY(this.x - 6, this.y) != null){
-			let tileRight, tileLeft;
+		if (this.scene.layer){
+			if (this.scene.layer.getTileAtWorldXY(this.x + 6, this.y) != null && 
+				this.scene.layer.getTileAtWorldXY(this.x - 6, this.y) != null){
+				let tileRight, tileLeft;
 
-			tileRight = this.scene.layer.getTileAtWorldXY(this.x + 6, this.y);
-			tileLeft = this.scene.layer.getTileAtWorldXY(this.x - 6, this.y);
-			if (this.getRightCenter().x + WALL_DISTANCE < tileRight.right && tileRight.collides){
-				this.collideRight = true;
-			} else {
-				this.collideRight = false;
-			}
-			if (this.getLeftCenter().x - WALL_DISTANCE < tileLeft.right + 16 && tileLeft.collides){
-				this.collideLeft = true;
-			} else {
-				this.collideLeft = false;
+				tileRight = this.scene.layer.getTileAtWorldXY(this.x + 6, this.y);
+				tileLeft = this.scene.layer.getTileAtWorldXY(this.x - 6, this.y);
+				if (this.getRightCenter().x + WALL_DISTANCE < tileRight.right && tileRight.collides){
+					this.collideRight = true;
+				} else {
+					this.collideRight = false;
+				}
+				if (this.getLeftCenter().x - WALL_DISTANCE < tileLeft.right + 16 && tileLeft.collides){
+					this.collideLeft = true;
+				} else {
+					this.collideLeft = false;
+				}
 			}
 		}
 		
@@ -237,7 +240,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			this.anims.play("dark_land");
 			this.canLand = false;
 
-            new Particle(this.scene, this.x, this.y, "land_particles_anim")
+            new Particle(this.scene, this.x, this.y, "land_particles_anim");
 		}
 
 		this.slowAfterDash();
@@ -418,6 +421,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 				this.blockedLeft && this.anims.play("dark_wall");
 				if (keyCOnce || this.inputPad.aOnce){
 					this.wallJump(RIGHT);
+				}
+			}
+			if (this.blockedLeft || this.blockedRight){
+				this.particleCounter++;
+
+				if (this.particleCounter % WALL_PARTICLE_INTERVAL == 0){
+					new Particle(this.scene,
+						this.x + (Math.random() * 6) - 4,
+						this.y,
+						"wall_particles_anim").setFlipX(this.flipX);
 				}
 			}
 		}
