@@ -17,6 +17,8 @@ export class House01 extends Level {
 	}
 
 	create(){
+		super.create();
+
 		const map = this.add.tilemap("house01_map");
 		const tileset = map.addTilesetImage("tileset", "house01_tileset");
 		this.layer = map.createLayer("tiles", tileset);

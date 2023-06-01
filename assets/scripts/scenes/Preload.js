@@ -190,6 +190,8 @@ export class Preload extends Level {
 		this.player = new Player(this, 0, 0).setVisible(false);
 		this.player.canDash = false;
 
-		this.loadScene("Menu", 100);
+		this.scene.start("Menu", {
+			gamepad: this.player.gamepad,
+		});
 	}
 }

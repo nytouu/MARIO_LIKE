@@ -43,6 +43,8 @@ export class Dream01 extends Level {
 	}
 
 	create(){
+		super.create();
+
 		this.shader = this.add.shader('shader_thing', 0, 16, 1920, 1080);
 
 		const map = this.add.tilemap("dream01_map");
@@ -77,7 +79,6 @@ export class Dream01 extends Level {
 
 		this.cameras.main.setZoom(2);
 		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, 0)
-		console.log(this.cameraCoords)
 
 		if (this.currentScreen == 2){
 			this.platforms.create(this.spawnCoords.x, this.spawnCoords.y, "spike")
@@ -91,8 +92,6 @@ export class Dream01 extends Level {
 	}
 
     update(){
-		console.log(this.player.x, this.player.y, this.currentScreen)
-
 		// transition for first screen
 		if (this.currentScreen == 0){
 			if (this.player.x <= SCREEN_WIDTH){

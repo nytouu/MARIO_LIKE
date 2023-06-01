@@ -4,6 +4,9 @@ import { Bed } from "../components/Bed.js"
 import { Pill } from "../components/Pill.js"
 import { Particle } from "../components/Particle.js";
 
+const MASK_MIN_SCALE = 0;
+const MASK_MAX_SCALE = 2.5;
+
 export class Level extends Phaser.Scene {
 	init() {
 		this.isPaused = false;
@@ -24,7 +27,44 @@ export class Level extends Phaser.Scene {
 
 	preload() {}
 
-	create() {}
+	create() {
+		/*
+			transition effet from 
+			https://dev.to/jorbascrumps/creating-spelunky-style-level-transitions-in-phaser-2ajd
+		*/
+		const maskShape = new Phaser.Geom.Circle(
+			this.sys.game.config.width / 2,
+			this.sys.game.config.height / 2,
+			this.sys.game.config.height / 2
+		);
+		const maskGfx = this.add.graphics()
+			.fillCircleShape(maskShape)
+			.generateTexture('mask');
+
+		this.mask = this.add.image(0, 0, 'mask').setPosition(
+				this.sys.game.config.width / 2,
+				this.sys.game.config.height / 2,
+			);
+
+		this.cameras.main.setMask(new Phaser.Display.Masks.BitmapMask(this, this.mask));
+
+		this.events.on(Phaser.Scenes.Events.CREATE, () => {
+			const propertyConfig = {
+				ease: 'Expo.easeInOut',
+				from: MASK_MIN_SCALE,
+				start: MASK_MIN_SCALE,
+				to: MASK_MAX_SCALE,
+			};
+
+			this.tweens.add({
+				delay: 0,
+				duration: 600,
+				scaleX: propertyConfig,
+				scaleY: propertyConfig,
+				targets: this.mask,
+			});
+		});
+	}
 
 	update() {}
 
@@ -59,7 +99,6 @@ export class Level extends Phaser.Scene {
 		this.pills.children.each(pill => {
 			pill.setImmovable(true);
 		})
-		console.log(this.pills)
 	}
 
 	loadBed(map){
@@ -69,9 +108,29 @@ export class Level extends Phaser.Scene {
 		})
 	}
 
+	sceneTransition(time){
+		const propertyConfig = {
+			ease: 'Expo.easeInOut',
+			from: MASK_MAX_SCALE,
+			start: MASK_MAX_SCALE,
+			to: MASK_MIN_SCALE,
+		};
+
+		this.tweens.add({
+			delay: 0,
+			duration: time,
+			scaleX: propertyConfig,
+			scaleY: propertyConfig,
+			targets: this.mask,
+		});
+	}
+
 	loadScene(key, time){
 		if (!this.isGoingOut){
 			this.cameras.main.fadeOut(time, 0, 0, 0);
+			if (this.scene.key != "Menu"){
+				this.sceneTransition(time);
+			}
 			setTimeout(() => {
 				this.scene.start(key, {
 					gamepad: this.player.gamepad,
@@ -97,6 +156,7 @@ export class Level extends Phaser.Scene {
 			player.setImmovable(true);
 			player.body = null;
 
+			this.sceneTransition(800);
 			setTimeout(() => {
 				this.cameras.main.fadeOut(200, 0, 0, 0);
 				player.setAlpha(0);
@@ -156,7 +216,7 @@ export class Level extends Phaser.Scene {
 	}
 
 	setupScreen(n, cx, cy, px, py){
-		console.log("setup screen ", n)
+		console.log("setup screen :", n)
 		this.currentScreen = n;
 		this.spawnCoords = {
 			x: px,

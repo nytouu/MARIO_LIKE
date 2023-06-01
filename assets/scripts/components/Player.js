@@ -101,8 +101,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         // clear the gamepad
         this.gamepad = null;
-        this.gamepadConnected = false;
-
         // resets inputs when disconnected
         this.resetGamepad();
     }
