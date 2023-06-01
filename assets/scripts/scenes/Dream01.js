@@ -56,7 +56,8 @@ export class Dream01 extends Level {
 		this.loadPills(map);
 
 		this.player = new Player(this, this.spawnCoords.x, this.spawnCoords.y);
-		this.ladder = new Ladder(this, 0, 128);
+		this.ladder1 = new Ladder(this, 0, 128);
+		this.ladder2 = new Ladder(this, 912, -32);
 
 		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
 		this.player.setCollideWorldBounds(true);
@@ -69,8 +70,10 @@ export class Dream01 extends Level {
 		this.physics.add.collider(this.player, this.platforms);
 		this.physics.add.collider(this.player, this.spikes, this.killPlayer, null, this, this.player);
 		this.physics.add.overlap(this.player, this.orbs, this.handleOrbs, this.boingOrb, this, this.player);
-		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
 		this.physics.add.overlap(this.player, this.pills, this.handlePills, null, this.player);
+
+		this.physics.add.overlap(this.player, this.ladder1, this.handleLadders, null, this.player);
+		this.physics.add.overlap(this.player, this.ladder2, this.handleLadders, null, this.player);
 
 		this.cameras.main.setZoom(2);
 		this.cameras.main.pan(this.cameraCoords.x, this.cameraCoords.y, 0)
@@ -231,6 +234,13 @@ export class Dream01 extends Level {
 					SCREEN_HEIGHT * 1.5 + TILE_WIDTH * 2,
 					36, 232
 				);
+			}
+			if (this.player.x > 830){
+				this.spawnCoords = { x: 816, y: 88 };
+
+				if (this.player.y < 16){
+					console.log("gg");
+				}
 			}
 		}
 

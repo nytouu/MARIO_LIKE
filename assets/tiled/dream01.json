@@ -8227,7 +8227,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":176
                 }, 
                 {
@@ -8250,7 +8250,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":160
                 }, 
                 {
@@ -8273,7 +8273,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":144
                 }, 
                 {
@@ -8296,7 +8296,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":112
                 }, 
                 {
@@ -8319,7 +8319,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":128
                 }, 
                 {
@@ -8342,33 +8342,10 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":96
                 },
             
-                {
-                 "gid":2410,
-                 "height":16,
-                 "id":474,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"direction",
-                         "type":"string",
-                         "value":"up"
-                        }, 
-                        {
-                         "name":"isSolid",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":784,
-                 "y":80
-                }, 
                 {
                  "gid":2410,
                  "height":16,
@@ -8554,29 +8531,6 @@
                  "y":64
                 }, 
                 {
-                 "gid":2411,
-                 "height":16,
-                 "id":483,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"direction",
-                         "type":"string",
-                         "value":"down"
-                        }, 
-                        {
-                         "name":"isSolid",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":784,
-                 "y":64
-                }, 
-                {
                  "gid":2351,
                  "height":16,
                  "id":484,
@@ -8665,7 +8619,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":48
                 }, 
                 {
@@ -8688,7 +8642,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":32
                 }, 
                 {
@@ -8711,7 +8665,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":800,
+                 "x":784,
                  "y":16
                 }, 
                 {
@@ -8782,6 +8736,29 @@
                  "width":16,
                  "x":832,
                  "y":400
+                }, 
+                {
+                 "gid":2410,
+                 "height":16,
+                 "id":501,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"up"
+                        }, 
+                        {
+                         "name":"isSolid",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":784,
+                 "y":176
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -8917,8 +8894,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":713.090909090909,
-                 "y":160.363636363636
+                 "x":720,
+                 "y":80
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -8982,8 +8959,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":728.708333333333,
-                 "y":25.1666666666667
+                 "x":712.958333333333,
+                 "y":151.666666666667
                 }, 
                 {
                  "gid":2298,
@@ -9010,7 +8987,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":501,
+ "nextobjectid":502,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -9475,7 +9452,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -10016,7 +9993,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -10557,7 +10534,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -12180,7 +12157,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -12261,7 +12238,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -12721,7 +12698,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -13262,7 +13239,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -13803,7 +13780,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -14344,7 +14321,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -14885,7 +14862,7 @@
                         {
                          "name":"isSolid",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
