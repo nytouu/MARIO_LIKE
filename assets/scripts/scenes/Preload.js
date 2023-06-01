@@ -176,6 +176,6 @@ export class Preload extends Level {
 			repeat : 0
 		});
 
-		this.scene.start("House01");
+		this.loadScene("Menu", 100);
 	}
 }
