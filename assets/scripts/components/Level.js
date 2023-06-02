@@ -117,7 +117,7 @@ export class Level extends Phaser.Scene {
 		};
 
 		this.tweens.add({
-			delay: 0,
+			delay: 1000 - time,
 			duration: time,
 			scaleX: propertyConfig,
 			scaleY: propertyConfig,
@@ -156,7 +156,7 @@ export class Level extends Phaser.Scene {
 			player.setImmovable(true);
 			player.body = null;
 
-			this.sceneTransition(800);
+			this.sceneTransition(700);
 			setTimeout(() => {
 				this.cameras.main.fadeOut(200, 0, 0, 0);
 				player.setAlpha(0);

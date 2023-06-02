@@ -730,12 +730,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	shrinkX(){
-		if (this.scaleX > SHRINK_MIN){
-			this.scaleX -= SHRINK_INCREMENT;
-		}
-	}
-
 	shrinkY(){
 		if (this.scaleY > SHRINK_MIN){
 			this.scaleY -= SHRINK_INCREMENT;
@@ -745,12 +739,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	increaseX(){
 		if (this.scaleX < INCREASE_MAX){
 			this.scaleX += SHRINK_INCREMENT;
-		}
-	}
-
-	increaseY(){
-		if (this.scaleY < INCREASE_MAX){
-			this.scaleY += SHRINK_INCREMENT;
 		}
 	}
 
