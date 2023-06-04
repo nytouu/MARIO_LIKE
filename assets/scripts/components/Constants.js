@@ -35,3 +35,6 @@ const TILE_WIDTH = 16;
 const SCREEN_WIDTH = TILE_WIDTH * 20;
 const SCREEN_HEIGHT = TILE_WIDTH * 10;
 const TRANSITION_TIME = 300;
+
+const TEXT_H1 = "aaah, j'ai hâte de dormir..."
+const TEXT_H2 = "il faut que je prenne mes pillules."

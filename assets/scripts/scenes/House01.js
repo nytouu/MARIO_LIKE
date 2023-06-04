@@ -32,6 +32,20 @@ export class House01 extends Level {
 		this.player = new Player(this, 176, 135);
 		this.ladder = new Ladder(this, 48, 32);
 
+		this.text = this.add.text(64, 152, TEXT_H1,
+			{fontFamily: "scientifica", fontSize: "6px", resolution: 10})
+			.setDepth(1000)
+			.setAlpha(0);
+
+		setTimeout(() => {
+			this.tweens.add({
+				targets: this.text,
+				alpha: 1,
+				duration: 500,
+				ease: 'Power2'
+			});
+		}, 1000);
+
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
 		this.physics.add.overlap(this.player, this.bed, this.bed.highlightBed, null, this.bed);

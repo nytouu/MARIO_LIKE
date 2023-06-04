@@ -7,6 +7,7 @@ export class Preload extends Level {
 	}
 
 	preload(){
+		// load images
 		this.load.image("placeholder", "assets/imgs/placeholder.png");
 
 		this.load.image("spike", "assets/imgs/spike.png");
@@ -16,6 +17,11 @@ export class Preload extends Level {
 		this.load.image("ladder", "assets/imgs/ladder.png");
 
 		this.load.image("orb", "assets/imgs/orb.png");
+
+		this.load.image("player_dark_wall", "assets/imgs/player/dark_wall.png");
+		this.load.image("player_dark_dash", "assets/imgs/player/dark_dash.png");
+
+		// load spritesheets
 		this.load.spritesheet("orb_boing", "assets/imgs/orb_boing.png", 
 			{frameWidth: 16, frameHeight: 16});
 		
@@ -24,8 +30,6 @@ export class Preload extends Level {
 		this.load.spritesheet("pill_particle", "assets/imgs/pill_particle.png", 
 			{frameWidth: 32, frameHeight: 32});
 
-		this.load.image("player_dark_wall", "assets/imgs/player/dark_wall.png");
-		this.load.image("player_dark_dash", "assets/imgs/player/dark_dash.png");
 		this.load.spritesheet("player_bright_run", "assets/imgs/player/bright_run.png", 
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_run", "assets/imgs/player/dark_run.png",
@@ -54,7 +58,9 @@ export class Preload extends Level {
 		this.load.spritesheet("wall_particles", "assets/imgs/player/wall_particles.png",
 			{frameWidth: 32, frameHeight: 32});
 
+		//load shader
 		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
+
 	}
 
 	create(){
