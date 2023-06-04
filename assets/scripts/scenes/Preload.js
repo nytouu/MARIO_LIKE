@@ -61,6 +61,13 @@ export class Preload extends Level {
 		//load shader
 		this.load.glsl("shader_thing", "assets/shaders/frag.glsl");
 
+		// load audio
+		this.load.audio("dash", "assets/audio/dash.wav");
+		this.load.audio("jump", "assets/audio/jump.wav");
+		this.load.audio("walk", "assets/audio/walk2.wav");
+		this.load.audio("pickup", "assets/audio/pickup.wav");
+		this.load.audio("death", "assets/audio/death.wav");
+		this.load.audio("dream", "assets/audio/music/dream.mp3");
 	}
 
 	create(){

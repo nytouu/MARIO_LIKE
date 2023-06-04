@@ -147,7 +147,8 @@ export class Level extends Phaser.Scene {
 			player.anims.stop();
 			player.setTint(0xffffff);
 
-			this.cameras.main.shake(250, 0.002);
+			this.sound.play("death");
+			this.cameras.main.shake(450, 0.003);
 			
 			player.setMaxVelocity(0);
 			player.setVelocity(0);
@@ -168,6 +169,7 @@ export class Level extends Phaser.Scene {
 					cameraCoords: this.cameraCoords, 
 					currentScreen: this.currentScreen,
 					gamepad: this.player.gamepad,
+					music: this.music ? this.music : false,
 				});
 			}, 1000);
 		}
@@ -186,6 +188,7 @@ export class Level extends Phaser.Scene {
 	handlePills(player, pill){
 		if (pill){
 			new Particle(this.scene, pill.x, pill.y, "pill_particle_anim");
+			this.scene.sound.play("pickup");
 			pill.destroy();
 		}
 	}

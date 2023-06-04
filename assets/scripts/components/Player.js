@@ -43,6 +43,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.jumpTimer = 0;
 		this.dashTrailCounter = 0;
 		this.dashBoingCounter = 0;
+		this.walkCounter = 0;
 
 		this.onGround = this.body.blocked.down;
 		this.blockedLeft = this.body.blocked.left;
@@ -323,6 +324,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if ((keyLeft.isDown || this.inputPad.left) && !this.isWallJumping.right){
 				if (!this.isHyperDashing){
 					this.setAccelerationX(-ACCELERATION);
+					if (this.onGround){
+						this.walkCounter++;
+						if (this.walkCounter % WALK_INTERVAL == 0){
+							this.scene.sound.play("walk");
+						}
+					}
 				} else {
 					this.setAccelerationX(-ACCELERATION / 3);
 				}
@@ -336,6 +343,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			} else if ((keyRight.isDown || this.inputPad.right) && !this.isWallJumping.left){
 				if (!this.isHyperDashing){
 					this.setAccelerationX(ACCELERATION);
+					if (this.onGround){
+						this.walkCounter++;
+						if (this.walkCounter % WALK_INTERVAL == 0){
+							this.scene.sound.play("walk");
+						}
+					}
 				} else {
 					this.setAccelerationX(ACCELERATION / 3);
 				}
@@ -380,6 +393,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		// handle long jump press
 		if ((keyCOnce || this.inputPad.aOnce) && this.canJump &&
 			(this.onGround || this.isNearOrb || (getTimestamp() - this.startFallTime < COYOTE_TIME))){
+			this.scene.sound.play("jump");
 			this.jumpTimer = 1;
 			this.canJump = false;
 			this.isJumping = true;
@@ -489,9 +503,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			if (keyUp.isDown || this.inputPad.up){
 				this.setVelocityY(-CLIMB_SPEED);
 				this.anims.play("dark_climb", true);
+
+				this.walkCounter++;
+				if (this.walkCounter % WALK_INTERVAL == 0){
+					this.scene.sound.play("walk");
+				}
 			} else if (keyDown.isDown || this.inputPad.down){
 				this.setVelocityY(CLIMB_SPEED);
 				this.anims.play("dark_climb", true);
+
+				this.walkCounter++;
+				if (this.walkCounter % WALK_INTERVAL == 0){
+					this.scene.sound.play("walk");
+				}
 			} else {
 				this.setVelocityY(0);
 				this.setGravityY(0);
@@ -507,6 +531,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.isDashing)
 			dashWallJump = 2;
 
+		this.scene.sound.play("jump");
 		this.jumpTimer = 1;
 		this.canJump = false;
 		this.isJumping = true;
@@ -561,6 +586,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			return
 		else {
 			this.isDashing = true;
+			this.scene.sound.play("dash");
 
 			this.setGravity(0,1); // y gravity to keep this.onGround true when needed
 			this.setAcceleration(0,0);
@@ -581,7 +607,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 			this.body.velocity.normalize().scale(DASH_SPEED);
 
-			this.scene.cameras.main.shake(150, 0.002);
+			this.scene.cameras.main.shake(200, 0.002);
 
 			setTimeout(() => {
 				if (this.scene.isPaused){

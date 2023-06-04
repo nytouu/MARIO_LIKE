@@ -2,6 +2,16 @@ import { Player } from "../components/Player.js"
 import { Level } from "../components/Level.js"
 import { Ladder } from "../components/Ladder.js"
 
+const MUSIC_CONFIG = {
+    mute: false,
+    volume: 0.3,
+    rate: 1,
+    detune: 0,
+    seek: 0,
+    loop: true,
+    delay: 0,
+}
+
 export class Dream01 extends Level {
 	constructor(){
 		super("Dream01")
@@ -34,6 +44,12 @@ export class Dream01 extends Level {
 		this.loadGamepad = false;
 		if (data.gamepad){
 			this.loadGamepad = true;
+		}
+
+		if (!data.music){
+			this.loadMusic = true;
+		} else {
+			this.loadMusic = false;
 		}
 	}
 
@@ -88,6 +104,11 @@ export class Dream01 extends Level {
 		} else if (this.currentScreen == 5){
 			this.cameras.main.startFollow(this.player, false, LERP, LERP);
 			this.cameras.main.setBounds(0, 0, this.layer.width, SCREEN_HEIGHT, true);
+		}
+
+		if (this.loadMusic){
+			this.music = this.sound.add("dream", MUSIC_CONFIG);
+			this.music.play();
 		}
 	}
 
