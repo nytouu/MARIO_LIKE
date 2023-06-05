@@ -74,13 +74,13 @@ export class Dream01 extends Level {
 		this.loadPills(map);
 
 		this.player = new Player(this, this.spawnCoords.x, this.spawnCoords.y);
+		if (this.loadGamepad) { this.player.gamepadEventConnect() };
+
 		this.ladder1 = new Ladder(this, 0, 128);
 		this.ladder2 = new Ladder(this, 912, -32);
 
 		this.physics.world.setBounds(0, 0, this.layer.width, this.layer.height)
 		this.player.setCollideWorldBounds(true);
-
-		if (this.loadGamepad) { this.player.gamepadEventConnect() };
 
 		this.layer.setCollisionByProperty({isSolid: true});
 
@@ -259,7 +259,8 @@ export class Dream01 extends Level {
 				this.spawnCoords = { x: 816, y: 88 };
 
 				if (this.player.y < 16){
-					console.log("gg");
+					this.loadScene("House02", 1500);
+					this.music.stop();
 				}
 			}
 		}

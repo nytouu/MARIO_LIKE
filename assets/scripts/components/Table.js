@@ -22,10 +22,13 @@ export class Table extends Phaser.Physics.Arcade.Sprite {
 
 	takePills(player){
 		if (this.pills){
-			this.anims.play("table_no_pills")
-
-			this.pills = false;
+			this.hidePills();
 			player.takePills();
 		}
+	}
+
+	hidePills(){
+		this.anims.play("table_no_pills")
+		this.pills = false;
 	}
 }
