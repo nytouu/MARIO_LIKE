@@ -30,6 +30,9 @@ export class Preload extends Level {
 		this.load.spritesheet("pill_particle", "assets/imgs/pill_particle.png", 
 			{frameWidth: 32, frameHeight: 32});
 
+		this.load.spritesheet("table", "assets/imgs/table.png", 
+			{frameWidth: 16, frameHeight: 16});
+
 		this.load.spritesheet("player_bright_run", "assets/imgs/player/bright_run.png", 
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_dark_run", "assets/imgs/player/dark_run.png",
@@ -49,6 +52,8 @@ export class Preload extends Level {
 		this.load.spritesheet("player_dark_climb", "assets/imgs/player/dark_climb.png", 
 			{frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet("player_death", "assets/imgs/player/death.png", 
+			{frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet("player_take_pills", "assets/imgs/player/dark_take_pills.png", 
 			{frameWidth: 32, frameHeight: 32});
 
 		this.load.spritesheet("orb_particles", "assets/imgs/orb_particles.png",
@@ -135,6 +140,13 @@ export class Preload extends Level {
 			repeat : 0
 		});
 		this.anims.create({
+			key : 'dark_take_pills',
+			frames : this.anims.generateFrameNumbers('player_take_pills',
+				{start : 0, end : 5}),
+			frameRate : 5,
+			repeat : 0
+		});
+		this.anims.create({
 			key: 'dark_wall',
 			frames: [ { key: 'player_dark_wall', frame: 0 } ],
 			frameRate: 1,
@@ -198,6 +210,19 @@ export class Preload extends Level {
 				{start : 0, end : 5}),
 			frameRate : 10,
 			repeat : 0
+		});
+
+		this.anims.create({
+			key: 'table_with_pills',
+			frames: [ { key: 'table', frame: 0 } ],
+			frameRate: 1,
+			repeat: -1
+		});
+		this.anims.create({
+			key: 'table_no_pills',
+			frames: [ { key: 'table', frame: 1 } ],
+			frameRate: 1,
+			repeat: -1
 		});
 
 		this.player = new Player(this, 0, 0).setVisible(false);

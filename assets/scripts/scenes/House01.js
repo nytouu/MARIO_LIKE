@@ -29,8 +29,9 @@ export class House01 extends Level {
 
 		this.loadBed(map);
 
-		this.player = new Player(this, 176, 135);
 		this.ladder = new Ladder(this, 48, 32);
+		this.table = new Table(this, 128, 56);
+		this.player = new Player(this, 176, 135);
 
 		this.text = this.add.text(64, 152, TEXT_H1,
 			{fontFamily: "scientifica", fontSize: "6px", resolution: 10})
@@ -49,6 +50,7 @@ export class House01 extends Level {
 		this.physics.add.collider(this.player, this.layer);
 		this.physics.add.overlap(this.player, this.ladder, this.handleLadders, null, this.player);
 		this.physics.add.overlap(this.player, this.bed, this.bed.highlightBed, null, this.bed);
+		this.physics.add.overlap(this.player, this.table, this.table.highlightTable, null, this.table);
 
 		this.cameras.main.startFollow(this.player, false, LERP, LERP);
 		this.cameras.main.setZoom(2);
@@ -62,11 +64,26 @@ export class House01 extends Level {
 		this.player.isClimbingLadder = false;
 
 		if (this.physics.overlap(this.player, this.bed)){
-			if (this.player.interract)
-				this.loadScene("Dream01", 500);
+			if (this.player.interract){
+				if (this.player.canSleep)
+					this.loadScene("Dream01", 1500);
+				else 
+					this.text.setText(TEXT_H2);
+			}
 		} else {
 			if (this.bed.tintFill){
 				this.bed.highlightBed();
+			}
+		}
+
+		if (this.physics.overlap(this.player, this.table)){
+			if (this.player.interract){
+				this.table.takePills(this.player);
+				this.text.setText(TEXT_H3);
+			}
+		} else {
+			if (this.table.tintFill){
+				this.table.highlightTable();
 			}
 		}
 	}

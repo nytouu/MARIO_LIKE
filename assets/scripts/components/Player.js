@@ -32,6 +32,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		this.canDash = true;
 		this.canLand = true;
 		this.canClimbLadder = false;
+		this.canSleep = false;
 		this.wasClimbingLadder = false;
 		this.isDashing = false;
 		this.isJumping = false;
@@ -771,5 +772,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 	resetSize(){
 		this.scaleX < 1 ? this.scaleX += SHRINK_INCREMENT : this.scaleX -= SHRINK_INCREMENT;
 		this.scaleY < 1 ? this.scaleY += SHRINK_INCREMENT : this.scaleY -= SHRINK_INCREMENT;
+	}
+
+	takePills(){
+		this.canMove = false;
+		this.anims.play("dark_take_pills", true);
+		setTimeout(() => {
+			this.canMove = true;
+		}, 1500);
+
+		this.canSleep = true;
 	}
 }
