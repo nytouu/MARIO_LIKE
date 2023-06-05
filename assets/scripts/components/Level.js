@@ -11,6 +11,7 @@ export class Level extends Phaser.Scene {
 	init() {
 		this.isPaused = false;
 		this.isGoingOut = false;
+		this.text = false;
 
 		this.cameras.main.fadeIn(700, 0, 0, 0);
 

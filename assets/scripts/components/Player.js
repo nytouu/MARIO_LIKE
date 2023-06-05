@@ -776,9 +776,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	takePills(){
 		this.canMove = false;
+		this.canJump = false;
+
+		this.setVelocity(0);
 		this.anims.play("dark_take_pills", true);
 		setTimeout(() => {
 			this.canMove = true;
+			this.canJump = true;
 		}, 1500);
 
 		this.canSleep = true;
