@@ -229,7 +229,7 @@ export class Dream01 extends Level {
 					334, 216
 				);
 			}
-			if (this.player.y < SCREEN_HEIGHT + TILE_WIDTH){
+			if (this.player.y < SCREEN_HEIGHT + TILE_WIDTH && this.player.x < TILE_WIDTH){
 				this.setupScreen(
 					5, 
 					SCREEN_WIDTH * 0.5,
@@ -245,7 +245,7 @@ export class Dream01 extends Level {
 			}
 		}
 		else if (this.currentScreen == 5){
-			if (this.player.y > SCREEN_HEIGHT + TILE_WIDTH){
+			if (this.player.y > SCREEN_HEIGHT + TILE_WIDTH && this.player.x < TILE_WIDTH){
 				this.cameras.main.stopFollow();
 				this.cameras.main.removeBounds();
 				this.setupScreen(
