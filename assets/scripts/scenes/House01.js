@@ -39,7 +39,7 @@ export class House01 extends Level {
 		this.player = new Player(this, 176, 135);
 		if (this.loadGamepad) { this.player.gamepadEventConnect() };
 
-		this.text = this.add.text(64, 152, TEXT_H1,
+		this.text = this.add.text(64, 152, TEXT_H01_1,
 			{fontFamily: "scientifica", fontSize: "6px", resolution: 10})
 			.setDepth(1000)
 			.setAlpha(0);
@@ -74,7 +74,7 @@ export class House01 extends Level {
 				if (this.player.canSleep)
 					this.loadScene("Dream01", 1500);
 				else 
-					this.text.setText(TEXT_H2);
+					this.text.setText(TEXT_H01_2);
 			}
 		} else {
 			if (this.bed.tintFill){
@@ -85,7 +85,7 @@ export class House01 extends Level {
 		if (this.physics.overlap(this.player, this.table)){
 			if (this.player.interract){
 				this.table.takePills(this.player);
-				this.text.setText(TEXT_H3);
+				this.text.setText(TEXT_H01_3);
 			}
 		} else {
 			if (this.table.tintFill){

@@ -200,6 +200,7 @@ export class Level extends Phaser.Scene {
 
 			player.interruptDash();
 
+			this.cameras.main.shake(150, 0.001);
 			player.canDash = true;
 			player.setTint(0xffffff);
 		}
